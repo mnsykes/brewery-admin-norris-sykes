@@ -1,0 +1,29 @@
+{
+	"name": "brewery-admin",
+	"version": "1.0.0",
+	"description": "Admin tool for brewery management",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mnsykes/brewery-admin-norris-sykes.git"
+	},
+	"author": "Daniella Norris and Matthew Sykes",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/mnsykes/brewery-admin-norris-sykes/issues"
+	},
+	"homepage": "https://github.com/mnsykes/brewery-admin-norris-sykes#readme",
+	"devDependencies": {
+		"dotenv": "^16.0.3",
+		"nodemon": "^2.0.20"
+	},
+	"dependencies": {
+		"bootstrap": "^5.2.3",
+		"express": "^4.18.2",
+		"express-handlebars": "^6.0.7",
+		"mysql2": "^3.1.2"
+	}
+}
