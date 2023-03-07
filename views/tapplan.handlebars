@@ -1,0 +1,31 @@
+{{> header}}
+<main class="container">
+    <section class="row mb-5">
+        <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4" action="" method="POST">
+            <div class="input-group mb-3">
+                <span class="input-group-text tapplan-bg_light" id="on-now">on now: </span>
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="beer name"
+                    aria-label="on now"
+                    aria-describedby="on-now"
+                />
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text tapplan-bg_light" id="on-after">on after: </span>
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="beer name"
+                    aria-label="on after"
+                    aria-describedby="on-after"
+                />
+            </div>
+
+            <div class="col-sm-12">
+                <button type="submit" class="btn tapplan-bg_light">Submit</button>
+            </div>
+        </form>
+    </section>
+</main>
