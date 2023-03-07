@@ -1,0 +1,27 @@
+a {
+	text-decoration: none;
+}
+
+.search-bg_dark {
+	background-color: #4e6b88;
+}
+
+.search-bg_light {
+	background-color: #84a0bb;
+}
+
+.tapplan-bg_dark {
+	background-color: #608253;
+}
+
+.tapplan-bg_light {
+	background-color: #7cad6c;
+}
+
+.requests-bg_dark {
+	background-color: #aa8c7c;
+}
+
+.requests-bg_light {
+	background-color: #e4b297;
+}
