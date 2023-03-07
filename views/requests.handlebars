@@ -1,0 +1,76 @@
+{{> header}}
+<main class="container">
+    <section class="row mb-5">
+        <form id="requests-search_box" class="rounded requests-bg_dark p-4" action="api/requests" method="POST">
+            <div class="input-group mb-3">
+                <span class="input-group-text requests-bg_light" id="request-style">style request: </span>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="request_style"
+                    placeholder="Enter beer style"
+                    aria-label="request style"
+                    aria-describedby="request-style"
+                />
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text requests-bg_light" id="add_notes">additional notes</span>
+                <textarea class="form-control" name="add_notes" aria-label="additional notes"></textarea>
+            </div> 
+            <div class="col-sm-12">
+                <button type="submit" class="btn requests-bg_light">Submit</button>
+            </div>
+        </form>
+    </section>
+    <section class="row mb-5">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="requests-bg_dark">
+                    <tr>
+                        <th>style</th>
+                        <th>requested by</th>
+                        <th>request date</th>
+                        <th>approval</th>
+                        <th>approved by</th>
+                        <th>approval date</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>pilsner</td>
+                        <td>matt</td>
+                        <td>3/6/2023</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button type="button" class="btn btn-sm rounded requests-bg_light">action</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut recusandae culpa voluptatum at dolore dolor sit, ratione, alias cum neque distinctio dolores doloribus. Esse explicabo placeat iusto voluptate molestias dicta.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>pilsner</td>
+                        <td>matt</td>
+                        <td>3/6/2023</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button type="button" class="btn btn-sm rounded requests-bg_light">action</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut recusandae culpa voluptatum at dolore dolor sit, ratione, alias cum neque distinctio dolores doloribus. Esse explicabo placeat iusto voluptate molestias dicta.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
