@@ -1,1 +1,1 @@
-USE brewery_admin_db;
+USE toot_app_db;

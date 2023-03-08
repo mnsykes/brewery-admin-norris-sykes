@@ -3,14 +3,16 @@ const db = require("../db");
 
 router.route("/requests").post(async (req, res) => {
 	try {
-		console.log(req.body);
 		const insert_date = new Date();
-		console.log(insert_date);
-		const { request_style, requestor, add_notes } = req.body;
+		// This is hard coded for now until sessions are
+		// set up then this will be replaced by user_id
+		const requestor = "Matt";
+		const { request_style, add_notes } = req.body;
 		await db.query(
-			`INSERT INTO requests (style, request_date, request_notes)
-		     VALUES (?,?,?)
-		     [request_style, insert_date, add_notes]`
+			`INSERT INTO requests (style, requestor, notes, request_date)
+		     VALUES (?,?,?,?)
+		     `,
+			[request_style, requestor, add_notes, insert_date]
 		);
 		res.redirect("/requests");
 	} catch (err) {
@@ -18,5 +20,14 @@ router.route("/requests").post(async (req, res) => {
 			return res.status(409).send("That style has already been requested.");
 		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
 	}
+});
+
+router.route("/requests/:requestId").delete(async (req, res) => {
+	const [{ affectedRows }] = await db.query(`DELETE FROM requests WHERE id=?`, [
+		req.params.requestId
+	]);
+
+	if (affectedRows === 1) res.status(204).end();
+	else res.status(404).send("Cart item not found");
 });
 module.exports = router;

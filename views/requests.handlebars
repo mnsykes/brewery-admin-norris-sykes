@@ -37,38 +37,22 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each request}}
                     <tr>
-                        <td>pilsner</td>
-                        <td>matt</td>
-                        <td>3/6/2023</td>
+                        <td>{{style}}</td>
+                        <td>{{requestor}}</td>
+                        <td>{{request_date}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td>
-                            <button type="button" class="btn btn-sm rounded requests-bg_light">action</button>
+                            <button class="btn btn-sm action-btn rounded requests-bg_light" data-request-id="{{id}}">action</button>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="7">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut recusandae culpa voluptatum at dolore dolor sit, ratione, alias cum neque distinctio dolores doloribus. Esse explicabo placeat iusto voluptate molestias dicta.
-                        </td>
+                        <td colspan="7">{{notes}}</td>
                     </tr>
-                    <tr>
-                        <td>pilsner</td>
-                        <td>matt</td>
-                        <td>3/6/2023</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button type="button" class="btn btn-sm rounded requests-bg_light">action</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="7">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut recusandae culpa voluptatum at dolore dolor sit, ratione, alias cum neque distinctio dolores doloribus. Esse explicabo placeat iusto voluptate molestias dicta.
-                        </td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
