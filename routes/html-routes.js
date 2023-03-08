@@ -15,7 +15,10 @@ router.get("/tapplan", async (req, res) => {
 });
 
 router.get("/requests", async (req, res) => {
-	res.render("requests", { headerBg: "requests-bg_dark" });
+	const [requests] = await db.query(`SELECT * FROM requests`);
+	const data = { request: requests, headerBg: "requests-bg_dark" };
+
+	res.render("requests", data);
 });
 
 module.exports = router;
