@@ -24,44 +24,39 @@
             <img src="{{beerimg}}" alt="" class="img-fluid">
         </div>
         <div class="beer_desc col-sm-9">
+        {{#each styles}}
             <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">style</h3>
-                <p>pilsner</p>
+                <p>{{beer}}</p>
             </div>
             <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">description</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis laborum quae
-                    architecto laudantium dolorem! Repellendus praesentium cumque quaerat provident dolore
-                    totam consequatur unde temporibus magni. Distinctio, expedita officia nobis rerum
-                    repellendus exercitationem, numquam blanditiis ipsum eaque laborum maxime aliquam dolore
-                    cupiditate cum? Quidem quis eveniet nemo commodi, pariatur ex quam necessitatibus amet
-                    architecto iste? Molestiae facere voluptates iure distinctio laudantium perferendis amet
-                    nihil provident veritatis, in quidem, dolorem enim est libero alias. Ipsa esse perferendis
-                    eos eius ad reprehenderit dolor.</p>
+                <p>{{comments}}</p>
 
             </div>
             <div id="beer_stats" class="row">
                 <div class="col-sm-3 text-center">
                     <h4 class="badge rounded-pill search-bg_light p-2 text-center">ibu</h4>
-                    <p class="text-center">50</p>
+                    <p class="text-center">"{{ibu}}</p>
                 </div>
                 <div class="col-sm-3 text-center">
                     <h4 class="badge rounded-pill search-bg_light p-2">srm</h4>
-                    <p>2-5</p>
+                    <p>{{srm}}</p>
                 </div>
                 <div class="col-sm-3 text-center">
                     <h4 class="badge rounded-pill search-bg_light p-2">abv</h4>
-                    <p>4-5%</p>
+                    <p>{{abv}}</p>
                 </div>
                 <div class="col-sm-3 text-center">
                     <h4 class="badge rounded-pill search-bg_light p-2">examples</h4>
-                    <ul>
-                        <li>Beck's</li>
-                        <li>Amstel</li>
-                        <li>Pilsner Urquell</li>
+                    <ul> 
+                        {{#each examples}}
+                        <li></li>
+                        {{/each}}
                     </ul>
                 </div>
             </div>
+        {{/each}}
         </div>
     </section>
 </main>
