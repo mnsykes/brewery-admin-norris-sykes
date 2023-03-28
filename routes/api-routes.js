@@ -1,5 +1,8 @@
 const router = require("express").Router();
 const db = require("../db");
+const fs = require('fs');
+const express = require('express')
+const app = express();
 
 router.route("/requests").post(async (req, res) => {
 	try {
@@ -31,20 +34,7 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	else res.status(404).send("Cart item not found");
 });
 
-router
-	.route('/stylesearch')
-	.post(async(req,res) => {
-		try {
-			const {style} = req.body;
-			await db.query(`INSERT INTO styles (style, name, examples, ibu, srm, abv)
-			VALUES(?,?,?,?,?)`,
-			[style, beer, examples, ibu, srm, abv]
-			)
-			res.redirect("/stylesearch")
-		}
-		catch(err) {
-			res.status(404).send('style not found, please try again')
-		}
 
-	})
+
 module.exports = router;
+

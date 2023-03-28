@@ -1,14 +1,17 @@
 const router = require("express").Router();
 const db = require("../db");
 const path = require("path");
+const { route } = require("./api-routes");
+const express = require('express')
+const app = express();
 
 router.get("/", async (req, res) => {
 	res.render("index", { heading: "Brewery Admin Tool", title: "Brewery Admin" });
 });
 
-router.get("/stylesearch", async (req, res) => {
-	res.render("stylesearch", { headerBg: "search-bg_dark", beerimg: "/images/pils.jpeg" });
-});
+router.get("/stylesearch",async (req, res) => {
+		res.render("stylesearch", { headerBg: "search-bg_dark", beerimg: "/images/pils.jpeg" });
+	})
 
 router.get("/tapplan", async (req, res) => {
 	res.render("tapplan", { headerBg: "tapplan-bg_dark" });
@@ -22,3 +25,4 @@ router.get("/requests", async (req, res) => {
 });
 
 module.exports = router;
+
