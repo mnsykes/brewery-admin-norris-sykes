@@ -34,6 +34,25 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	else res.status(404).send("Cart item not found");
 });
 
+router
+	.route("/stylesearch")
+	.post(async (req, res) => {
+		try{
+			var body = req.body
+			var res_body = {
+				category: body.category,
+				name: body.name
+			};
+			res.render('beer', res_body)
+		}
+		catch{
+	
+		}
+	
+
+	
+	})
+
 
 
 module.exports = router;
