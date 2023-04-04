@@ -44,29 +44,29 @@ router.get("/dashboard", async (req, res) => {
 	};
 
 	const pages = [{
-			name: "Style Search",
-			bgColor: "search-bg_dark",
-			btnColor: "search-bg_light",
-			route: "/stylesearch"
-		},
-		{
-			name: "Tap Plan",
-			bgColor: "tapplan-bg_dark",
-			btnColor: "tapplan-bg_light",
-			route: "/tapplan"
-		},
-		{
-			name: "Requests",
-			bgColor: "requests-bg_dark",
-			btnColor: "requests-bg_light",
-			route: "/requests"
-		},
-		{
-			name: "Employees",
-			bgColor: "employees-bg_dark",
-			btnColor: "employees-bg_light",
-			route: "/employees"
-		}
+		name: "Style Search",
+		bgColor: "search-bg_dark",
+		btnColor: "search-bg_light",
+		route: "/stylesearch"
+	},
+	{
+		name: "Tap Plan",
+		bgColor: "tapplan-bg_dark",
+		btnColor: "tapplan-bg_light",
+		route: "/tapplan"
+	},
+	{
+		name: "Requests",
+		bgColor: "requests-bg_dark",
+		btnColor: "requests-bg_light",
+		route: "/requests"
+	},
+	{
+		name: "Employees",
+		bgColor: "employees-bg_dark",
+		btnColor: "employees-bg_light",
+		route: "/employees"
+	}
 	];
 	res.render("dashboard", {
 		page: pages,
@@ -124,7 +124,9 @@ router.get("/stylesearch", async (req, res) => {
 
 
 router.post("/stylesearch", async (req, res) => {
+
 	const beerData = req.session.beerData;
+	console.log(beerData)
 	const {
 		category,
 		name
@@ -136,6 +138,7 @@ router.post("/stylesearch", async (req, res) => {
 		category,
 		name
 	}) {
+
 		for (var i = 0; i < beerData.length; i++) {
 			if (beerData[i] === category && beerData[i] === name) {
 				console.log('this is fine')
@@ -144,6 +147,7 @@ router.post("/stylesearch", async (req, res) => {
 				console.log('this is not fine')
 			}
 		}
+
 	}
 	const results = filterKeys(beerData, {
 		category,
@@ -151,7 +155,7 @@ router.post("/stylesearch", async (req, res) => {
 	})
 
 	res.render("stylesearch", {
-		beerData,
+		beerData: req.session.beerData,
 		results,
 		headerBg: "search-bg_dark",
 		beerimg: "/images/pils.jpeg"

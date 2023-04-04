@@ -6,8 +6,6 @@ CREATE TABLE roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     role VARCHAR(30) NOT NULL
 );
-<<<<<<< HEAD
-=======
 
 
 CREATE TABLE employees (
@@ -32,4 +30,3 @@ CREATE TABLE requests (
   FOREIGN KEY (approver_id)
     REFERENCES employees (id)
 );
->>>>>>> 171e176578e95ef9b1ffc98990dc2de9a6a208c8
