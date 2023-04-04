@@ -1,16 +1,15 @@
 {{> header}}
 <main class="container" onload="getData()">
     <section class="row mb-5">
-        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch/style" method="post">
+        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch" method="get">
             <div class="input-group mb-3">
                 <span class="input-group-text search-bg_light" id="style_search">category: </span>
                 <div id="brandFilter">
-                    <input name="category" id="searchbar1" type="text" placeholder="Choose category" />
-                    <datalist onclick="search_beer()"id="categories">
-                        {{#each beerData}}
-                        <option id="category-option" value="{{this.category}}">{{this.category}}</option>
+                    <input name="category" onkeyup="getData()" id="searchbar1" type="text" placeholder="Choose category" />
+                        <ul id="myUL">{{#each beerData}}
+                        <li> <a id="category-option">{{this.category}}</a> </li>
                         {{/each}}
-                    </datalist>
+                        </ul>
                 </div>
             </div>
             <div class="input-group mb-3">

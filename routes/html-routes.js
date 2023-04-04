@@ -6,6 +6,8 @@ const express = require('express')
 const app = express();
 const apiurl = `https://api.github.com/repos/ascholer/bjcp-styleview/contents/styles.json`;
 const axios = require('axios');
+const { getEnvironmentData } = require("worker_threads");
+const getData = require('/Users/daniellanorris/brewery-admin-norris-sykes/public/index.js')
 
 router.get("/", async (req, res) => {
 	res.render("index", { heading: "Brewery Admin Tool", title: "Brewery Admin" });
@@ -17,28 +19,12 @@ router.get("/stylesearch",async (req, res) => {
 		console.log(data)
 		const beerData = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
 		res.render("stylesearch", {beerData, headerBg: "search-bg_dark", beerimg: "/images/pils.jpeg" });
-		ariaHidden.document.querySelector('#search_results')
-  
+		getData()
+		
 	} catch (error) {
 		console.error('There was a problem fetching the JSON file:', error);
 	}
 	})
-
-router.post("/stylesearch/style", async (req,res) => {
-	 function getData() {
-		 Handlebars.registerHelper("result", function(category, name) {
-			if(req.query.category && req.query.name) {
-				//put information into handlebars html
-				document.querySelector('#search_results');
-	
-			} else {
-				console.log('must select category and style');
-				res.redirect("/stylesearch");
-			}
-		 });
-		
-	}
-})
 
 
 router.get("/tapplan", async (req, res) => {
