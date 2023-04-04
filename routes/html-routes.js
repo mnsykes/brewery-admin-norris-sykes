@@ -1,24 +1,39 @@
 const router = require("express").Router();
 const db = require("../db");
 const path = require("path");
-const { route } = require("./api-routes");
+const {
+	route
+} = require("./api-routes");
 const express = require('express')
 const app = express();
 const apiurl = `https://api.github.com/repos/ascholer/bjcp-styleview/contents/styles.json`;
 const axios = require('axios');
-const { getEnvironmentData } = require("worker_threads");
-const getData = require('/Users/daniellanorris/brewery-admin-norris-sykes/public/index.js')
+const {
+	getEnvironmentData
+} = require("worker_threads");
+const getData = require('/Users/daniellanorris/brewery-admin-norris-sykes/public/index.js');
+const {
+	runInNewContext
+} = require("vm");
+const {
+	finished
+} = require("stream");
 
 router.get("/", async (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
 		heading: "Login"
 	};
-	res.render("index", { data });
+	res.render("index", {
+		data
+	});
 });
 
 router.get("/login", async (req, res) => {
-	res.render("login", { heading: "Login", title: "Brewery Admin" });
+	res.render("login", {
+		heading: "Login",
+		title: "Brewery Admin"
+	});
 });
 
 router.get("/dashboard", async (req, res) => {
@@ -28,8 +43,7 @@ router.get("/dashboard", async (req, res) => {
 		title: "toot | dashboard"
 	};
 
-	const pages = [
-		{
+	const pages = [{
 			name: "Style Search",
 			bgColor: "search-bg_dark",
 			btnColor: "search-bg_light",
@@ -82,30 +96,69 @@ router.get("/employees", async (req, res) => {
 	});
 });
 
-router.get("/stylesearch",async (req, res) => {
+router.get("/stylesearch", async (req, res) => {
 	try {
-		const {data} = await axios.get(apiurl);
-		console.log(data)
+		const {
+			data
+		} = await axios.get(apiurl);
 		const beerData = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
-		res.render("stylesearch", {beerData, headerBg: "search-bg_dark", beerimg: "/images/pils.jpeg" });
-		getData()
-		
+
+		req.session.beerData = beerData;
+
+		const dataLoad = {
+			loggedIn: req.session.loggedIn,
+			heading: "Style Search",
+			headerBg: "search-bg_dark",
+			beerimg: "/images/pils.jpeg",
+			title: "toot | style search",
+		};
+		res.render("stylesearch", {
+			beerData,
+			dataLoad,
+		});
 	} catch (error) {
 		console.error('There was a problem fetching the JSON file:', error);
 	}
+})
+
+
+
+router.post("/stylesearch", async (req, res) => {
+	const beerData = req.session.beerData;
+	const {
+		category,
+		name
+	} = req.body
+
+	console.log(beerData)
+
+	function filterKeys(beerData, {
+		category,
+		name
+	}) {
+		for (var i = 0; i < beerData.length; i++) {
+			if (beerData[i] === category && beerData[i] === name) {
+				console.log('this is fine')
+				return beerData
+			} else {
+				console.log('this is not fine')
+			}
+		}
+	}
+	const results = filterKeys(beerData, {
+		category,
+		name
 	})
 
-router.get("/stylesearch", async (req, res) => {
-	const data = {
-		loggedIn: req.session.loggedIn,
-		heading: "Style Search",
+	res.render("stylesearch", {
+		beerData,
+		results,
 		headerBg: "search-bg_dark",
-		beerimg: "/images/pils.jpeg",
-		title: "toot | style search"
-	};
-
-	res.render("stylesearch", data);
+		beerimg: "/images/pils.jpeg"
+	})
 });
+
+
 
 router.get("/tapplan", async (req, res) => {
 	res.render("tapplan", {
@@ -139,4 +192,3 @@ router.get("/requests", async (req, res) => {
 });
 
 module.exports = router;
-

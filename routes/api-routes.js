@@ -94,7 +94,8 @@ router
 			};
 			res.render('beer', res_body)
 		}
-		catch{
+		catch(err){
+			console.log(error)
 	
 		}
 	

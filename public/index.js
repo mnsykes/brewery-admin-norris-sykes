@@ -3,28 +3,24 @@ const { text } = require('stream/consumers');
 const { router } = require('../app');
 const app = require('../app');
 
-app.use('/public', (req, res, next) => {
-	if (req.url.endsWith('.json')) {
-	  res.setHeader('Content-Type', 'application/json');
-	}
-	next();
-  });
+
 
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 
-async function removeRequest(e) {
-	const requestId = e.target.getAttribute("data-request-id");
+// async function removeRequest(e) {
+// 	const requestId = e.target.getAttribute("data-request-id");
 
-	await fetch(`/api/requests/${requestId}`, {
-		method: "delete"
-	});
-	window.location.replace("/requests");
-}
+// 	await fetch(`/api/requests/${requestId}`, {
+// 		method: "delete"
+// 	});
+// 	window.location.replace("/requests");
+// }
 
-for (const btn of document.querySelectorAll(".delete-btn")) {
-	btn.onclick = removeRequest;
-}
+// for (const btn of document.querySelectorAll(".delete-btn")) {
+// 	btn.onclick = removeRequest;
+// }
+
 
 function getData() {
 	var input = document.getElementById('searchbar1')
@@ -43,9 +39,6 @@ function getData() {
 		
 	}
 }
-
-
-
 // function search_beer() {
 // 	const searchbar1 = document.getElementById('searchbar1')
 // 	const searchbar2 = document.getElementById('searchbar2')
@@ -103,3 +96,5 @@ function getData() {
 // search_beer()
 
 //should only be doing put and delete requests
+
+module.exports = getData

@@ -1,48 +1,35 @@
 {{> header}}
 <main class="container" onload="getData()">
     <section class="row mb-5">
-        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch" method="get">
+        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch" method="POST">
             <div class="input-group mb-3">
-<<<<<<< HEAD
                 <span class="input-group-text search-bg_light" id="style_search">category: </span>
                 <div id="brandFilter">
-                    <input name="category" onkeyup="getData()" id="searchbar1" type="text" placeholder="Choose category" />
-                        <ul id="myUL">{{#each beerData}}
-                        <li> <a id="category-option">{{this.category}}</a> </li>
+                    {{!-- <input name="submit" for="beers-list" onkeyup="getData()" id="searchbar1" type="text"
+                        placeholder="Choose category" /> --}}
+                    <select name="catList" class="form-control" type="text"> {{#each beerData}}
+                        <option value="{{this.category}}" id="category-option" placeholder="category">{{this.category}}</option>
                         {{/each}}
-                        </ul>
+                    </select>
                 </div>
-=======
-                <span class="input-group-text search-bg_light" id="style_search">style: </span>
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter beer style"
-                    aria-label="style search"
-                    aria-describedby="style_search"
-                />
-            </div>
-            
-            <div class="col-sm-12">
-                <button type="submit" class="btn search-bg_light">Submit</button>
->>>>>>> 171e176578e95ef9b1ffc98990dc2de9a6a208c8
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text search-bg_light" id="style_search">style: </span>
                 <div id="brandFilter">
-                    <input onclick="search_beer()" name="name" id="searchbar2" type="text" placeholder="Choose name" name="search" />
-                    <datalist id="styles">
-                        {{#each beerData}}
-                        <option id="styles-option" value="{{beerData.name}}">{{beerData.name}}</option>
+                    {{!-- <input name="submit" for="beers-list" onkeyup="getData()" id="searchbar1" type="text"
+                        placeholder="Choose category" /> --}}
+                    <select name="nameList" class="form-control" type="text"> {{#each beerData}}
+                        <option value="{{this.name}}" id="category-option">{{this.name}}</option>
                         {{/each}}
-                    </datalist>
+                    </select>
                 </div>
-                <div class="col-sm-12">
-                    <button onclick="getData()" type="submit" class="btn search-bg_light m-space">Submit</button>
-                </div>
+            </div>
+            <div class="col-sm-12">
+                <button type="submit" class="btn search-bg_light m-space">Submit</button>
+            </div>
         </form>
     </section>
-    <section class="row search_results" action="/stylesearch/styles" method="get">
+    <section id="target" class="row search_results">
         <div class="beer_img col-sm-3">
             <img src="{{beerimg}}" alt="" class="img-fluid">
         </div>

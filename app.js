@@ -7,9 +7,11 @@ const htmlRoutes = require("./routes/html-routes");
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 const app = express();
+const bodyParser = require("body-parser");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const sessionStore = new MySQLStore({}, db);
 app.use(
