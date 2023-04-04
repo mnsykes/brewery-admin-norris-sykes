@@ -1,5 +1,5 @@
-{{> header}}
 <div class="container">
+<<<<<<< HEAD
 <h1 class="text-center mt-5">{{heading}}</h1>
 <div class="container">
     
@@ -28,3 +28,39 @@
 
 </div>
 
+=======
+	<h1 class="text-center mt-5">{{data.heading}}</h1>
+	<form id="login" action="api/login" method="POST">
+		<div class="input-group mb-3">
+			<label for="username" class="input-group-text search-bg_light">Username: </label>
+			<input
+				type="text"
+				class="form-control"
+				id="username"
+				name="username"
+				placeholder="Enter your username"
+				aria-label="username"
+				aria-describedby="username"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<label for="password" class="input-group-text search-bg_light">Password: </label>
+			<input
+				type="text"
+				class="form-control"
+				id="password"
+				name="password"
+				placeholder="Enter your password"
+				aria-label="password"
+				aria-describedby="password"
+				required
+			/>
+		</div>
+		<div class="col-sm-12">
+			<button type="submit" class="btn search-bg_light">Submit</button>
+			<a href="/update-account">Forgot username/password?</a>
+		</div>
+	</form>
+</div>
+>>>>>>> 171e176578e95ef9b1ffc98990dc2de9a6a208c8

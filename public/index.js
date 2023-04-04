@@ -22,7 +22,7 @@ async function removeRequest(e) {
 	window.location.replace("/requests");
 }
 
-for (const btn of document.querySelectorAll(".action-btn")) {
+for (const btn of document.querySelectorAll(".delete-btn")) {
 	btn.onclick = removeRequest;
 }
 

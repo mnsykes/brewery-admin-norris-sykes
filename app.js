@@ -1,19 +1,34 @@
+require("dotenv").config();
 const express = require("express");
-const path = require("path")
+const exphbs = require("express-handlebars");
+const db = require("./db");
 const apiRoutes = require("./routes/api-routes");
 const htmlRoutes = require("./routes/html-routes");
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const app = express();
-
-const exphbs = require("express-handlebars");
-require('dotenv').config()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.engine('handlebars', exphbs.engine())
-app.set('view engine', 'handlebars')
+const sessionStore = new MySQLStore({}, db);
+app.use(
+	session({
+		key: "session_cookie",
+		secret: process.env.SESSION_SECRET,
+		store: sessionStore,
+		resave: false,
+		saveUninitialized: false,
+		proxy: true,
+		cookie: {
+			maxAge: 1000 * 60 * 60 * 24
+		}
+	})
+);
+app.engine("handlebars", exphbs.engine());
+app.set("view engine", "handlebars");
 
-app.use(express.static('public'))
+app.use(express.static("public"));
 
 app.use("/", htmlRoutes);
 app.use("/api", apiRoutes);

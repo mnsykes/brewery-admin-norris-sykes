@@ -1,0 +1,14 @@
+{{> header}}
+<div class="container">
+    <h1 class="text-center mt-5">{{data.heading}}</h1>
+    {{#each page}}
+    <div class="row {{bgColor}} rounded w-50 p-5 mb-5">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+            <a href="{{route}}" class="btn rounded {{btnColor}}">{{name}}</a>
+        </div>
+    </div>
+    {{/each}}
+
+</div>
+
