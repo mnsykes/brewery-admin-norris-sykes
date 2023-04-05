@@ -6,18 +6,9 @@ const {
 } = require("./api-routes");
 const express = require('express')
 const app = express();
-const apiurl = `https://api.github.com/repos/ascholer/bjcp-styleview/contents/styles.json`;
+const apiurl = `https://raw.githubusercontent.com/ascholer/bjcp-styleview/main/styles.json`;
 const axios = require('axios');
-const {
-	getEnvironmentData
-} = require("worker_threads");
-const getData = require('/Users/daniellanorris/brewery-admin-norris-sykes/public/index.js');
-const {
-	runInNewContext
-} = require("vm");
-const {
-	finished
-} = require("stream");
+
 
 router.get("/", async (req, res) => {
 	const data = {
@@ -96,15 +87,15 @@ router.get("/employees", async (req, res) => {
 	});
 });
 
+
+
+
+
+
+
 router.get("/stylesearch", async (req, res) => {
 	try {
-		const {
-			data
-		} = await axios.get(apiurl);
-		const beerData = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
-
-		req.session.beerData = beerData;
-
+		const beerData = await axios.get(apiurl)
 		const dataLoad = {
 			loggedIn: req.session.loggedIn,
 			heading: "Style Search",
@@ -124,8 +115,6 @@ router.get("/stylesearch", async (req, res) => {
 
 
 router.post("/stylesearch", async (req, res) => {
-
-	const beerData = req.session.beerData;
 	console.log(beerData)
 	const {
 		category,
@@ -155,7 +144,6 @@ router.post("/stylesearch", async (req, res) => {
 	})
 
 	res.render("stylesearch", {
-		beerData: req.session.beerData,
 		results,
 		headerBg: "search-bg_dark",
 		beerimg: "/images/pils.jpeg"
