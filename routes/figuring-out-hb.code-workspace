@@ -15,7 +15,7 @@
                 "port": 3306,
                 "askForPassword": true,
                 "driver": "MySQL",
-                "name": "beer",
+                "name": "beer_db",
                 "database": "toot_app_db",
                 "username": "root"
             }
