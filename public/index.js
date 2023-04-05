@@ -6,9 +6,13 @@ async function removeRequest(e) {
 	});
 	window.location.replace("/requests");
 }
+if (typeof document !== 'undefined') {
+	for (const btn of document.querySelectorAll(".delete-btn")) {
+		btn.onclick = removeRequest;
+	
+	// Manipulating the DOM here
+ }
 
-for (const btn of document.querySelectorAll(".delete-btn")) {
-	btn.onclick = removeRequest;
 }
 
 async function approveRequest(e) {
@@ -19,9 +23,10 @@ async function approveRequest(e) {
 	});
 	window.location.replace("/requests");
 }
-
+if (typeof document !== 'undefined') {
 for (const btn of document.querySelectorAll(".approve-btn")) {
 	btn.onclick = approveRequest;
+}
 }
 
 async function removeEmployee(e) {
@@ -32,7 +37,8 @@ async function removeEmployee(e) {
 	});
 	window.location.replace("/employees");
 }
-
+if (typeof document !== 'undefined') {
 for (const btn of document.querySelectorAll(".emp-action-btn")) {
 	btn.onclick = removeEmployee;
+}
 }

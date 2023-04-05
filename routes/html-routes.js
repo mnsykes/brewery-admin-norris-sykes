@@ -140,7 +140,7 @@ router.post("/stylesearch", async (req, res) => {
 	}) {
 
 		for (var i = 0; i < beerData.length; i++) {
-			if (beerData[i] === category && beerData[i] === name) {
+			if (beerData[i].category === category && beerData[i].name === name) {
 				console.log('this is fine')
 				return beerData
 			} else {
