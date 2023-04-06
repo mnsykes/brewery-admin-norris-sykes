@@ -1,7 +1,7 @@
 {{> header}}
 <main class="container" onload="getData()">
     <section class="row mb-5">
-        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch" method="POST">
+        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch/style" method="POST">
             <div class="input-group mb-3">
                 <span class="input-group-text search-bg_light" id="style_search">category: </span>
                 <div id="brandFilter">
@@ -34,12 +34,12 @@
             <img src="{{beerimg}}" alt="" class="img-fluid">
         </div>
         <div class="beer_desc col-sm-9">
-            {{#each beerData}}
+            {{#with results}}
             <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">category</h3>
-                <p>{{category}}</p>
+                <p>{{this.category}}</p>
                 <h3 class="badge rounded-pill search-bg_light p-3">style</h3>
-                <p>{{name}}</p>
+                <p>{{this.name}}</p>
             </div>
             <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">description</h3>
@@ -63,7 +63,7 @@
                     <p> {{commercialexamples}}</p>
                 </div>
             </div>
-            {{/each}}
+            {{/with}}
         </div>
     </section>
 </main>

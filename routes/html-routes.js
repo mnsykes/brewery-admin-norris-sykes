@@ -13,7 +13,7 @@ const checkAuth = require("../middleware/auth");
 
 router.get("/", (req, res) => {
 	const data = {
-		// loggedIn: req.session.loggedIn,
+		loggedIn: req.session.loggedIn,
 		heading: "Login",
 		title: "toot | login"
 	};
@@ -100,7 +100,9 @@ router.get("/employees", async (req, res) => {
 
 router.get("/stylesearch", async (req, res) => {
 	try {
-		const beerData = await axios.get(apiurl)
+		const beerJSON = await axios.get(apiurl)
+		const beerData = beerJSON.data
+
 		const dataLoad = {
 			loggedIn: req.session.loggedIn,
 			heading: "Style Search",
@@ -119,42 +121,55 @@ router.get("/stylesearch", async (req, res) => {
 
 
 
-router.post("/stylesearch", async (req, res) => {
-	console.log(beerData)
+router.post("/stylesearch/style", async (req, res) => {
+	const beerJSON = await axios.get(apiurl)
+	const beerData = beerJSON.data
+
 	const {
-		category,
-		name
+		catList,
+		nameList
 	} = req.body
 
-	console.log(beerData)
+
 
 	function filterKeys(beerData, {
-		category,
-		name
+		catList,
+		nameList
 	}) {
 
-		for (var i = 0; i < beerData.length; i++) {
-			if (beerData[i].category === category && beerData[i].name === name) {
+		let matchingBeer = null;
+		for (let i = 0; i < beerData.length; i++) {
+			if (beerData[i].category === catList && beerData[i].name === nameList) {
 				console.log('this is fine')
-				return beerData
+				matchingBeer = beerData[i]
+				break;
 			} else {
 				console.log('this is not fine')
-			}
-		}
+				console.log(beerData[i].name)
+				console.log(beerData[i].category)
+				console.log(i)
 
+			}
+
+		}
+		return matchingBeer;
 	}
 	const results = filterKeys(beerData, {
-		category,
-		name
+		catList,
+		nameList
 	})
 
+
 	res.render("stylesearch", {
+		loggedIn: req.session.loggedIn,
+		beerData,
 		results,
-		headerBg: "search-bg_dark",
 		beerimg: "/images/pils.jpeg"
 	})
 
-	res.redirect('/stylesearch')
+console.log(results)
+console.log(results.name)
+
 });
 
 
