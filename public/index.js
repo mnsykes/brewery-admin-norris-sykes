@@ -13,7 +13,7 @@ for (const btn of document.querySelectorAll(".delete-btn")) {
 
 async function approveRequest(e) {
 	const requestId = e.target.getAttribute("data-request-id");
-	console.log(requestId);
+	// console.log(requestId);
 	await fetch(`/api/requests/${requestId}`, {
 		method: "put"
 	});
@@ -36,3 +36,10 @@ async function removeEmployee(e) {
 for (const btn of document.querySelectorAll(".emp-action-btn")) {
 	btn.onclick = removeEmployee;
 }
+
+// let gitdata = fetch(`https://api.github.com/repos/ascholer/bjcp-styleview/contents/styles.json`)
+// 	.then((d) => d.json())
+// 	.then((d) => fetch(`https://api.github.com/repos/ascholer/bjcp-styleview/git/blobs/styles.json`))
+// 	.then((d) => d.json())
+// 	.then((d) => JSON.parse(atob(d.content)));
+// console.log(gitdata);
