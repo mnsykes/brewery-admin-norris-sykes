@@ -148,6 +148,8 @@ router.post("/stylesearch", async (req, res) => {
 		headerBg: "search-bg_dark",
 		beerimg: "/images/pils.jpeg"
 	})
+
+	res.redirect('/stylesearch')
 });
 
 
