@@ -16,7 +16,7 @@ router.get("/login", async (req, res) => {
 	res.render("login", { heading: "Login", title: "Brewery Admin" });
 });
 
-router.get("/dashboard", checkAuth, async (req, res) => {
+router.get("/dashboard", async (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
 		heading: "Dashboard",
