@@ -148,12 +148,15 @@ router.post("/stylesearch/style", async (req, res) => {
 				console.log(beerData[i].name)
 				console.log(beerData[i].category)
 				console.log(i)
-
+		
 			}
-
+			
 		}
+		if(!matchingBeer) res.redirect('/stylesearch')
 		return matchingBeer;
+		
 	}
+	
 	const results = filterKeys(beerData, {
 		catList,
 		nameList
@@ -167,8 +170,8 @@ router.post("/stylesearch/style", async (req, res) => {
 		beerimg: "/images/pils.jpeg"
 	})
 
-console.log(results)
-console.log(results.name)
+// console.log(results)
+// console.log(results.name)
 
 });
 
