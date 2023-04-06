@@ -9,15 +9,15 @@ const app = express();
 const apiurl = `https://raw.githubusercontent.com/ascholer/bjcp-styleview/main/styles.json`;
 const axios = require('axios');
 
+const checkAuth = require("../middleware/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", (req, res) => {
 	const data = {
-		loggedIn: req.session.loggedIn,
-		heading: "Login"
+		// loggedIn: req.session.loggedIn,
+		heading: "Login",
+		title: "toot | login"
 	};
-	res.render("index", {
-		data
-	});
+	res.render("index", data);
 });
 
 router.get("/login", async (req, res) => {
@@ -34,41 +34,43 @@ router.get("/dashboard", async (req, res) => {
 		title: "toot | dashboard"
 	};
 
-	const pages = [{
-		name: "Style Search",
-		bgColor: "search-bg_dark",
-		btnColor: "search-bg_light",
-		route: "/stylesearch"
-	},
-	{
-		name: "Tap Plan",
-		bgColor: "tapplan-bg_dark",
-		btnColor: "tapplan-bg_light",
-		route: "/tapplan"
-	},
-	{
-		name: "Requests",
-		bgColor: "requests-bg_dark",
-		btnColor: "requests-bg_light",
-		route: "/requests"
-	},
-	{
-		name: "Employees",
-		bgColor: "employees-bg_dark",
-		btnColor: "employees-bg_light",
-		route: "/employees"
-	}
+	pages = [
+		{
+			name: "Style Search",
+			bgColor: "search-bg_dark",
+			btnColor: "search-bg_light",
+			route: "/stylesearch"
+		},
+		{
+			name: "Tap Plan",
+			bgColor: "tapplan-bg_dark",
+			btnColor: "tapplan-bg_light",
+			route: "/tapplan"
+		},
+		{
+			name: "Requests",
+			bgColor: "requests-bg_dark",
+			btnColor: "requests-bg_light",
+			route: "/requests"
+		},
+		{
+			name: "Employees",
+			bgColor: "employees-bg_dark",
+			btnColor: "employees-bg_light",
+			route: "/employees"
+		}
 	];
 	res.render("dashboard", {
 		page: pages,
 		loggedIn: req.session.loggedIn,
 		heading: "Login",
-		title: "Brewery",
+		title: "toot | brewery",
 		data
 	});
 });
 
 router.get("/employees", async (req, res) => {
+	// console.log(req.session);
 	const [roles] = await db.query(`SELECT * FROM roles`);
 	const [employees] = await db.query(`
 		SELECT 
@@ -78,13 +80,16 @@ router.get("/employees", async (req, res) => {
 		roles.*
 		FROM employees JOIN roles ON employees.role_id = roles.id
 	`);
-
-	res.render("employees", {
+	const data = {
 		role: roles,
 		employee: employees,
+		loggedIn: req.session.loggedIn,
+		heading: "Employees",
 		headerBg: "employees-bg_dark",
-		loggedIn: req.session.loggedIn
-	});
+		title: "toot | employees"
+	};
+
+	res.render("employees", data);
 });
 
 
@@ -155,11 +160,14 @@ router.post("/stylesearch", async (req, res) => {
 
 
 router.get("/tapplan", async (req, res) => {
-	res.render("tapplan", {
-		headerBg: "tapplan-bg_dark",
+	const data = {
 		loggedIn: req.session.loggedIn,
+		heading: "Employees",
+		headerBg: "tapplan-bg_dark",
+		title: "toot | employees",
 		arrow: "arrow fa-sharp fa-solid fa-arrow-left fa-2xl"
-	});
+	};
+	res.render("tapplan", data);
 });
 
 router.get("/requests", async (req, res) => {
@@ -172,17 +180,12 @@ router.get("/requests", async (req, res) => {
 	const data = {
 		request: requests,
 		heading: "Dashboard",
-		title: "toot | dashboard",
-		headerBg: "requests-bg_dark",
-		loggedIn: req.session.loggedIn
+		loggedIn: req.session.loggedIn,
+		title: "toot | requests",
+		headerBg: "requests-bg_dark"
 	};
 
-	res.render("requests", {
-		request: requests,
-		headerBg: "requests-bg_dark",
-		loggedIn: req.session.loggedIn,
-		data
-	});
+	res.render("requests", data);
 });
 
 module.exports = router;

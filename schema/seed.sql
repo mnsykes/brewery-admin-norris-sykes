@@ -5,3 +5,4 @@ VALUES
     ("Management"),
     ("Brewhouse"),
     ("Tap Room");
+

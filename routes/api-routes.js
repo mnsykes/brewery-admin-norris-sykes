@@ -4,6 +4,7 @@ const db = require("../db");
 const fs = require('fs');
 const express = require('express')
 const app = express();
+const checkAuth = require("../middleware/auth");
 
 router.post("/login", async (req, res) => {
 	try {
@@ -11,13 +12,14 @@ router.post("/login", async (req, res) => {
 		// console.log(req.body);
 		if (!(username && password)) return res.status(400).send("Must include username and password");
 		const [[user]] = await db.query(`SELECT * FROM employees WHERE username = ?`, [username]);
-		console.log(user);
+		// console.log(user);
 		if (!user) return res.status(400).send("User not found");
 		const isCorrectPassword = await bcrypt.compare(password, user.password);
 		if (!isCorrectPassword) return res.status(400).send("Login error");
 
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
+		req.session.roleId = user.role_id;
 		req.session.save(() => res.redirect("/dashboard"));
 	} catch (err) {
 		return res.status(500).send(err);
@@ -26,12 +28,12 @@ router.post("/login", async (req, res) => {
 
 // This route should create a new User
 router.route("/employees").post(async (req, res) => {
-	console.log(req.body);
 	try {
 		const { firstname, lastname, role, username, password, confirm_password } = req.body;
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
+		console.log(hash);
 		const role_id = parseInt(role);
 		await db.query(
 			`INSERT INTO employees (first_name, last_name, role_id, username, password)
