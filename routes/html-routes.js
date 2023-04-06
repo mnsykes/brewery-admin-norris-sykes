@@ -3,9 +3,9 @@ const db = require("../db");
 const path = require("path");
 const checkAuth = require("../middleware/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", (req, res) => {
 	const data = {
-		loggedIn: req.session.loggedIn,
+		// loggedIn: req.session.loggedIn,
 		heading: "Login",
 		title: "toot | login"
 	};
@@ -28,33 +28,25 @@ router.get("/dashboard", async (req, res) => {
 			name: "Style Search",
 			bgColor: "search-bg_dark",
 			btnColor: "search-bg_light",
-			route: "/stylesearch",
-			management: true,
-			brewhouse: true,
-			taproom: true
+			route: "/stylesearch"
 		},
 		{
 			name: "Tap Plan",
 			bgColor: "tapplan-bg_dark",
 			btnColor: "tapplan-bg_light",
-			route: "/tapplan",
-			management: true,
-			taproom: true
+			route: "/tapplan"
 		},
 		{
 			name: "Requests",
 			bgColor: "requests-bg_dark",
 			btnColor: "requests-bg_light",
-			route: "/requests",
-			management: true,
-			brewhouse: true
+			route: "/requests"
 		},
 		{
 			name: "Employees",
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
-			route: "/employees",
-			management: true
+			route: "/employees"
 		}
 	];
 	res.render("dashboard", {
