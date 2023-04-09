@@ -8,9 +8,11 @@ const express = require('express')
 const app = express();
 const apiurl = `https://raw.githubusercontent.com/ascholer/bjcp-styleview/main/styles.json`;
 const axios = require('axios');
+const { Configuration, OpenAIApi } = require("openai");
+// const {postData} = require("../image-generator")
+
 
 const checkAuth = require("../middleware/auth");
-
 router.get("/", (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
@@ -93,11 +95,6 @@ router.get("/employees", async (req, res) => {
 });
 
 
-
-
-
-
-
 router.get("/stylesearch", async (req, res) => {
 	try {
 		const beerJSON = await axios.get(apiurl)
@@ -122,15 +119,15 @@ router.get("/stylesearch", async (req, res) => {
 
 
 router.post("/stylesearch/style", async (req, res) => {
+
+	//deal with beer data, post category and style
 	const beerJSON = await axios.get(apiurl)
 	const beerData = beerJSON.data
-
+	exports.beerData = beerData
 	const {
 		catList,
 		nameList
 	} = req.body
-
-
 
 	function filterKeys(beerData, {
 		catList,
@@ -142,36 +139,55 @@ router.post("/stylesearch/style", async (req, res) => {
 			if (beerData[i].category === catList && beerData[i].name === nameList) {
 				console.log('this is fine')
 				matchingBeer = beerData[i]
+				console.log(beerData[i].categorynumber)
 				break;
 			} else {
 				console.log('this is not fine')
 				console.log(beerData[i].name)
 				console.log(beerData[i].category)
 				console.log(i)
-		
+
 			}
-			
+
 		}
-		if(!matchingBeer) res.redirect('/stylesearch')
+		if (!matchingBeer) res.redirect('/stylesearch')
 		return matchingBeer;
-		
+
 	}
-	
+
 	const results = filterKeys(beerData, {
 		catList,
 		nameList
 	})
+	//deal with api image data
+
+	const configuration = new Configuration({
+		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
+		apiKey: process.env.OPENAI_API_KEY,
+	});
+	const openai = new OpenAIApi(configuration);
+
+	// Define the OpenAI API response data
+	const response = await openai.createImage({
+		prompt: nameList,
+		n: 1,
+		size: "1024x1024",
+	});
+	const image_url = response.data.data[0].url;
+
+	// Define the data you want to send in the POST request
+	const postData = { image_url: image_url };
+	console.log(postData)
+	console.log(nameList)
 
 
 	res.render("stylesearch", {
 		loggedIn: req.session.loggedIn,
 		beerData,
 		results,
-		beerimg: "/images/pils.jpeg"
+		image_url
 	})
 
-// console.log(results)
-// console.log(results.name)
 
 });
 

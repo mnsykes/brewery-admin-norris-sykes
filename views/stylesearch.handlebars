@@ -1,5 +1,5 @@
 {{> header}}
-<main class="container" onload="getData()">
+<main class="container" >
     <section class="row mb-5">
         <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch/style" method="POST">
             <div class="input-group mb-3">
@@ -7,7 +7,7 @@
                 <div id="brandFilter">
                     {{!-- <input name="submit" for="beers-list" onkeyup="getData()" id="searchbar1" type="text"
                         placeholder="Choose category" /> --}}
-                    <select name="catList" class="form-control" type="text"> {{#each beerData}}
+                    <select name="catList" class="form-control" type="text" id="category-dropdown"> {{#each beerData}}
                         <option value="{{this.category}}" id="category-option" placeholder="category">{{this.category}}</option>
                         {{/each}}
                     </select>
@@ -18,8 +18,8 @@
                 <div id="brandFilter">
                     {{!-- <input name="submit" for="beers-list" onkeyup="getData()" id="searchbar1" type="text"
                         placeholder="Choose category" /> --}}
-                    <select name="nameList" class="form-control" type="text"> {{#each beerData}}
-                        <option value="{{this.name}}" id="category-option">{{this.name}}</option>
+                    <select name="nameList" class="form-control" type="text" id="style-dropdown"> {{#each beerData}}
+                        <option value="{{this.name}}" class="name-option">{{this.name}}</option>
                         {{/each}}
                     </select>
                 </div>
@@ -30,8 +30,8 @@
         </form>
     </section>
     <section id="target" class="row search_results">
-        <div class="beer_img col-sm-3">
-            <img src="{{beerimg}}" alt="" class="img-fluid">
+        <div class="beer_img col-sm-3" id="beer_img">
+            <img src="{{image_url}}" alt="" class="img-fluid">
         </div>
         <div class="beer_desc col-sm-9">
             {{#with results}}
@@ -67,3 +67,5 @@
         </div>
     </section>
 </main>
+
+<script type="module" src="/image-generator.js"> </script>
