@@ -75,3 +75,12 @@ async function filterStyles(e) {
 		styleDropdown.innerHTML = styleOptions;
 	});
 }
+
+// Get the URL of the current page
+const currentUrl = window.location.href;
+
+// Listen for the page refresh event
+window.addEventListener('refresh', () => {
+  // Redirect the user back to the current page on refresh
+  window.location.href = currentUrl;
+});

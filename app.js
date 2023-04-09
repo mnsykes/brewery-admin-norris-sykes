@@ -37,11 +37,15 @@ app.use("/api", apiRoutes);
 
 app.use('/public', (req, res, next) => {
 	if (req.url.endsWith('.json')) {
-	  res.setHeader('Content-Type', 'application/json');
+		res.setHeader('Content-Type', 'application/json');
 	}
 	next();
-  });
+});
 
+//redirecting to main search page on load
+app.get('/stylesearch/style', (req, res) => {
+	res.redirect('/stylesearch')
+});
 
 module.exports = app;
 

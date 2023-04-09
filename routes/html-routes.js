@@ -9,7 +9,7 @@ const app = express();
 const apiurl = `https://raw.githubusercontent.com/ascholer/bjcp-styleview/main/styles.json`;
 const axios = require('axios');
 const { Configuration, OpenAIApi } = require("openai");
-// const {postData} = require("../image-generator")
+
 
 
 const checkAuth = require("../middleware/auth");
@@ -177,9 +177,6 @@ router.post("/stylesearch/style", async (req, res) => {
 
 	// Define the data you want to send in the POST request
 	const postData = { image_url: image_url };
-	console.log(postData)
-	console.log(nameList)
-
 
 	res.render("stylesearch", {
 		loggedIn: req.session.loggedIn,
@@ -187,7 +184,6 @@ router.post("/stylesearch/style", async (req, res) => {
 		results,
 		image_url
 	})
-
 
 });
 
