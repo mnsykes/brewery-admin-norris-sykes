@@ -3,9 +3,9 @@ const db = require("../db");
 const path = require("path");
 const checkAuth = require("../middleware/auth");
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
 	const data = {
-		// loggedIn: req.session.loggedIn,
+		loggedIn: req.session.loggedIn,
 		heading: "Login",
 		title: "toot | login"
 	};
@@ -58,8 +58,7 @@ router.get("/dashboard", async (req, res) => {
 	});
 });
 
-router.get("/employees", async (req, res) => {
-	// console.log(req.session);
+router.get("/employees", checkAuth, async (req, res) => {
 	const [roles] = await db.query(`SELECT * FROM roles`);
 	const [employees] = await db.query(`
 		SELECT 

@@ -2,10 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const exphbs = require("express-handlebars");
 const db = require("./db");
-const apiRoutes = require("./routes/api-routes");
-const htmlRoutes = require("./routes/html-routes");
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
+const apiRoutes = require("./routes/api-routes");
+const htmlRoutes = require("./routes/html-routes");
 const app = express();
 
 app.use(express.json());

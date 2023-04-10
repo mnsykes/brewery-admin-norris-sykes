@@ -6,10 +6,10 @@ const checkAuth = require("../middleware/auth");
 router.post("/login", async (req, res) => {
 	try {
 		const { username, password } = req.body;
-		// console.log(req.body);
+
 		if (!(username && password)) return res.status(400).send("Must include username and password");
 		const [[user]] = await db.query(`SELECT * FROM employees WHERE username = ?`, [username]);
-		// console.log(user);
+
 		if (!user) return res.status(400).send("User not found");
 		const isCorrectPassword = await bcrypt.compare(password, user.password);
 		if (!isCorrectPassword) return res.status(400).send("Login error");
