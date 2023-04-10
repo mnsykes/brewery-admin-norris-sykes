@@ -7,9 +7,11 @@ const MySQLStore = require("express-mysql-session")(session);
 const apiRoutes = require("./routes/api-routes");
 const htmlRoutes = require("./routes/html-routes");
 const app = express();
+const bodyParser = require("body-parser");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const sessionStore = new MySQLStore({}, db);
 app.use(
@@ -33,4 +35,17 @@ app.use(express.static("public"));
 app.use("/", htmlRoutes);
 app.use("/api", apiRoutes);
 
+app.use('/public', (req, res, next) => {
+	if (req.url.endsWith('.json')) {
+		res.setHeader('Content-Type', 'application/json');
+	}
+	next();
+});
+
+//redirecting to main search page on load
+app.get('/stylesearch/style', (req, res) => {
+	res.redirect('/stylesearch')
+});
+
 module.exports = app;
+

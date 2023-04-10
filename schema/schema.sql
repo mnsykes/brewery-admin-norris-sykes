@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS toot_app_db;
+
 USE toot_app_db;
 
 CREATE TABLE roles (
