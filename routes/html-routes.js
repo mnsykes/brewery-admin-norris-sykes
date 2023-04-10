@@ -9,10 +9,8 @@ const app = express();
 const apiurl = `https://raw.githubusercontent.com/ascholer/bjcp-styleview/main/styles.json`;
 const axios = require('axios');
 const { Configuration, OpenAIApi } = require("openai");
-
-
-
 const checkAuth = require("../middleware/auth");
+
 router.get("/", (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
@@ -71,8 +69,7 @@ router.get("/dashboard", async (req, res) => {
 	});
 });
 
-router.get("/employees", async (req, res) => {
-	// console.log(req.session);
+router.get("/employees", checkAuth, async (req, res) => {
 	const [roles] = await db.query(`SELECT * FROM roles`);
 	const [employees] = await db.query(`
 		SELECT 

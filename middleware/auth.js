@@ -2,20 +2,18 @@ const db = require("../db");
 
 function checkAuth(req, res, next) {
 	const { path } = req.route;
-	console.log(path);
+	const roleId = req.session.roleId;
 
+	// Check role id to see if page can be accessed.
 	if (req.session.loggedIn) {
-		const roleId = db.query(
-			`
-			SELECT role_id
-			FROM employees
-			WHERE id = ?`,
-			[req.session.userId]
-		);
 		switch (path) {
 			case "/employees":
-				console.log(roleId);
-				// if (roleId !== 1) return res.status(400).send("Wrong permission");
+				if (roleId !== 1) return res.status(400).send("You are not able to view this page.");
+				break;
+			case "/tapplan":
+			case "/requests":
+				if (roleId !== 1 || roleId !== 2)
+					return res.status(400).send("You are not able to view this page.");
 				break;
 		}
 		return next();
