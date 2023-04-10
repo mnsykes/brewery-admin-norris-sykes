@@ -1,7 +1,12 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const db = require("../db");
+const fs = require('fs');
+const express = require('express')
+const app = express();
 const checkAuth = require("../middleware/auth");
+
+
 
 router.post("/login", async (req, res) => {
 	try {
@@ -82,6 +87,28 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	else res.status(404).send("Cart item not found");
 });
 
+router
+	.route("/stylesearch")
+	.post(async (req, res) => {
+		try{
+			var body = req.body
+			var res_body = {
+				category: body.category,
+				name: body.name
+			};
+			res.render('beer', res_body)
+		}
+		catch(err){
+			console.log(error)
+	
+		}
+	
+
+	
+	})
+
+
+
 router.route("/requests/:requestId").put(async (req, res) => {
 	const approval_date = new Date();
 
@@ -96,3 +123,4 @@ router.route("/requests/:requestId").put(async (req, res) => {
 	res.redirect("/requests");
 });
 module.exports = router;
+

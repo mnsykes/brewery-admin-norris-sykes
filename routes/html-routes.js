@@ -1,11 +1,21 @@
 const router = require("express").Router();
 const db = require("../db");
 const path = require("path");
-const checkAuth = require("../middleware/auth");
+const {
+	route
+} = require("./api-routes");
+const express = require('express')
+const app = express();
+const apiurl = `https://raw.githubusercontent.com/ascholer/bjcp-styleview/main/styles.json`;
+const axios = require('axios');
+const { Configuration, OpenAIApi } = require("openai");
 
+
+
+const checkAuth = require("../middleware/auth");
 router.get("/", (req, res) => {
 	const data = {
-		// loggedIn: req.session.loggedIn,
+		loggedIn: req.session.loggedIn,
 		heading: "Login",
 		title: "toot | login"
 	};
@@ -13,7 +23,10 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", async (req, res) => {
-	res.render("login", { heading: "Login", title: "Brewery Admin" });
+	res.render("login", {
+		heading: "Login",
+		title: "Brewery Admin"
+	});
 });
 
 router.get("/dashboard", async (req, res) => {
@@ -81,17 +94,100 @@ router.get("/employees", async (req, res) => {
 	res.render("employees", data);
 });
 
-router.get("/stylesearch", async (req, res) => {
-	const data = {
-		loggedIn: req.session.loggedIn,
-		heading: "Style Search",
-		headerBg: "search-bg_dark",
-		beerimg: "/images/pils.jpeg",
-		title: "toot | style search"
-	};
 
-	res.render("stylesearch", data);
+router.get("/stylesearch", async (req, res) => {
+	try {
+		const beerJSON = await axios.get(apiurl)
+		const beerData = beerJSON.data
+
+		const dataLoad = {
+			loggedIn: req.session.loggedIn,
+			heading: "Style Search",
+			headerBg: "search-bg_dark",
+			beerimg: "/images/pils.jpeg",
+			title: "toot | style search",
+		};
+		res.render("stylesearch", {
+			beerData,
+			dataLoad,
+		});
+	} catch (error) {
+		console.error('There was a problem fetching the JSON file:', error);
+	}
+})
+
+
+
+router.post("/stylesearch/style", async (req, res) => {
+
+	//deal with beer data, post category and style
+	const beerJSON = await axios.get(apiurl)
+	const beerData = beerJSON.data
+	exports.beerData = beerData
+	const {
+		catList,
+		nameList
+	} = req.body
+
+	function filterKeys(beerData, {
+		catList,
+		nameList
+	}) {
+
+		let matchingBeer = null;
+		for (let i = 0; i < beerData.length; i++) {
+			if (beerData[i].category === catList && beerData[i].name === nameList) {
+				console.log('this is fine')
+				matchingBeer = beerData[i]
+				console.log(beerData[i].categorynumber)
+				break;
+			} else {
+				console.log('this is not fine')
+				console.log(beerData[i].name)
+				console.log(beerData[i].category)
+				console.log(i)
+
+			}
+
+		}
+		if (!matchingBeer) res.redirect('/stylesearch')
+		return matchingBeer;
+
+	}
+
+	const results = filterKeys(beerData, {
+		catList,
+		nameList
+	})
+	//deal with api image data
+
+	const configuration = new Configuration({
+		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
+		apiKey: process.env.OPENAI_API_KEY,
+	});
+	const openai = new OpenAIApi(configuration);
+
+	// Define the OpenAI API response data
+	const response = await openai.createImage({
+		prompt: nameList,
+		n: 1,
+		size: "1024x1024",
+	});
+	const image_url = response.data.data[0].url;
+
+	// Define the data you want to send in the POST request
+	const postData = { image_url: image_url };
+
+	res.render("stylesearch", {
+		loggedIn: req.session.loggedIn,
+		beerData,
+		results,
+		image_url
+	})
+
 });
+
+
 
 router.get("/tapplan", async (req, res) => {
 	const data = {
