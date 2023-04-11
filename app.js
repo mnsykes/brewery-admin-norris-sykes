@@ -30,7 +30,7 @@ app.use(
 app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
 
-app.use(express.static("public"));
+app.use(express.static("./public"));
 
 app.use("/", htmlRoutes);
 app.use("/api", apiRoutes);
@@ -46,6 +46,8 @@ app.use('/public', (req, res, next) => {
 app.get('/stylesearch/style', (req, res) => {
 	res.redirect('/stylesearch')
 });
+
+app.get('')
 
 module.exports = app;
 

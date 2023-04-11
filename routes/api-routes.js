@@ -62,13 +62,15 @@ router.route("/requests").post(async (req, res) => {
 	try {
 		const insert_date = new Date();
 
-		const { request_style, add_notes } = req.body;
+		const {request_style, add_notes} = req.body;
+
+		const requestor_id = req.session.userId
 
 		await db.query(
 			`INSERT INTO requests (requestor_id, style, notes, request_date)
 		     VALUES (?,?,?,?)
 		     `,
-			[req.session.userId, request_style, add_notes, insert_date]
+			[requestor_id, request_style, add_notes, insert_date]
 		);
 		res.redirect("/requests");
 	} catch (err) {

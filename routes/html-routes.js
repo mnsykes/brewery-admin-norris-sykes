@@ -203,9 +203,10 @@ router.get("/requests", async (req, res) => {
 		FROM requests req
 		LEFT JOIN employees emp ON req.requestor_id = emp.id
 	`);
+	console.log(requests)
 
 	const data = {
-		request: requests,
+		requests: requests,
 		heading: "Dashboard",
 		loggedIn: req.session.loggedIn,
 		title: "toot | requests",
