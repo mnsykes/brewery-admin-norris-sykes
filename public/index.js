@@ -45,37 +45,6 @@ if (typeof document !== 'undefined') {
 
 
 
-//filtering out names according to categories
-async function filterStyles(e) {
-
-	fetch("/stylesearch", {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: {beerData}
-	})
-		.then(function (response) {
-			return response.json();
-		})
-
-		.catch(function (error) {
-			console.log(error);
-		});
-
-	const categoryDropdown = document.querySelector('#category-dropdown');
-	const styleDropdown = document.querySelector('#style-dropdown');
-
-	categoryDropdown.addEventListener('change', () => {
-
-		console.log('clicked')
-		const selectedCategory = categoryDropdown.value;
-		const filteredData = beerData.filter(item => item.category === selectedCategory);
-		const styleOptions = filteredData.map(item => `<option value="${item.name}" class="name-option">${item.name}</option>`).join('');
-		styleDropdown.innerHTML = styleOptions;
-	});
-}
-
 // Get the URL of the current page
 const currentUrl = window.location.href;
 

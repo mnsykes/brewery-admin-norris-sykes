@@ -127,33 +127,25 @@ router.post("/stylesearch/style", async (req, res) => {
 	} = req.body
 
 	function filterKeys(beerData, {
-		catList,
 		nameList
 	}) {
 
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
-			if (beerData[i].category === catList && beerData[i].name === nameList) {
+			if (beerData[i].name === nameList) {
 				console.log('this is fine')
 				matchingBeer = beerData[i]
 				console.log(beerData[i].categorynumber)
 				break;
-			} else {
-				console.log('this is not fine')
-				console.log(beerData[i].name)
-				console.log(beerData[i].category)
-				console.log(i)
-
-			}
-
+			} 
 		}
+
 		if (!matchingBeer) res.redirect('/stylesearch')
 		return matchingBeer;
 
 	}
 
 	const results = filterKeys(beerData, {
-		catList,
 		nameList
 	})
 	//deal with api image data
@@ -166,7 +158,7 @@ router.post("/stylesearch/style", async (req, res) => {
 
 	// Define the OpenAI API response data
 	const response = await openai.createImage({
-		prompt: nameList + "with little kittens inside of the glass",
+		prompt: nameList + "in a glass with an art deco background.",
 		n: 1,
 		size: "1024x1024",
 	});
@@ -203,7 +195,6 @@ router.get("/requests", async (req, res) => {
 		FROM requests req
 		LEFT JOIN employees emp ON req.requestor_id = emp.id
 	`);
-	console.log(requests)
 
 	const data = {
 		requests: requests,
