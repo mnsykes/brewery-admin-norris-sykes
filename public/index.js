@@ -84,3 +84,4 @@ window.addEventListener('refresh', () => {
   // Redirect the user back to the current page on refresh
   window.location.href = currentUrl;
 });
+

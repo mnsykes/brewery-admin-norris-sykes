@@ -166,7 +166,7 @@ router.post("/stylesearch/style", async (req, res) => {
 
 	// Define the OpenAI API response data
 	const response = await openai.createImage({
-		prompt: nameList,
+		prompt: nameList + "with little kittens inside of the glass",
 		n: 1,
 		size: "1024x1024",
 	});
