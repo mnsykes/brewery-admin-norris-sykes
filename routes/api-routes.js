@@ -38,9 +38,9 @@ router.route("/employees").post(async (req, res) => {
 		console.log(hash);
 		const role_id = parseInt(role);
 		await db.query(
-			`INSERT INTO employees (first_name, last_name, role_id, username, password)
+			`INSERT INTO employees (id, first_name, last_name, role_id, username, password)
 			 VALUES (?, ?, ?, ?, ?)`,
-			[firstname, lastname, role_id, username, hash]
+			[id, firstname, lastname, role_id, username, hash]
 		);
 		res.redirect("/employees");
 	} catch (err) {
@@ -53,7 +53,7 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	const [{ affectedRows }] = await db.query(`DELETE FROM employees WHERE id = ?`, [
 		req.params.employeeId
 	]);
-
+	console.log(affectedRows)
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });

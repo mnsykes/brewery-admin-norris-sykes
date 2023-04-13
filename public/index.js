@@ -12,7 +12,6 @@ if (typeof document !== 'undefined') {
 
 		// Manipulating the DOM here
 	}
-
 }
 
 async function approveRequest(e) {
