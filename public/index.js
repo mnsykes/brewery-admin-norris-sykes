@@ -42,6 +42,7 @@ if (typeof document !== "undefined") {
 	}
 }
 
+
 //filtering out names according to categories
 async function filterStyles(e) {
 	fetch("/stylesearch", {
@@ -73,6 +74,7 @@ async function filterStyles(e) {
 	});
 }
 
+
 // Get the URL of the current page
 const currentUrl = window.location.href;
 
@@ -81,3 +83,4 @@ window.addEventListener("refresh", () => {
 	// Redirect the user back to the current page on refresh
 	window.location.href = currentUrl;
 });
+

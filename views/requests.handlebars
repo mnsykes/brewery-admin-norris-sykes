@@ -1,9 +1,11 @@
 {{> header}}
 <main class="container">
     <section class="row mb-5">
-        <form id="requests-search_box" class="rounded requests-bg_dark p-4" action="api/requests" method="POST">
+        <form id="requests-search_box" class="rounded requests-bg_dark p-4"
+            action="api/requests" method="POST">
             <div class="input-group mb-3">
-                <span class="input-group-text requests-bg_light" id="request-style">style request: </span>
+                <span class="input-group-text requests-bg_light"
+                    id="request-style">style request: </span>
                 <input
                     type="text"
                     class="form-control"
@@ -11,18 +13,20 @@
                     placeholder="Enter beer style"
                     aria-label="request style"
                     aria-describedby="request-style"
-                />
+                    />
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text requests-bg_light" id="add_notes">additional notes</span>
-                <textarea class="form-control" name="add_notes" aria-label="additional notes"></textarea>
-            </div> 
+                <span class="input-group-text requests-bg_light" id="add_notes">additional
+                    notes</span>
+                <textarea class="form-control" name="add_notes"
+                    aria-label="additional notes"></textarea>
+            </div>
             <div class="col-sm-12">
                 <button type="submit" class="btn requests-bg_light">Submit</button>
             </div>
         </form>
     </section>
-    <section class="row mb-5">
+    <section>
         <div class="table-responsive">
             <table class="table">
                 <thead class="requests-bg_dark">
@@ -57,6 +61,7 @@
                     <tr>
                         <td colspan="7">{{notes}}</td>
                     </tr>
+
                     {{/each}}
                 </tbody>
             </table>

@@ -37,9 +37,9 @@ router.route("/employees").post(async (req, res) => {
 
 		const role_id = parseInt(role);
 		await db.query(
-			`INSERT INTO employees (first_name, last_name, role_id, username, password)
+			`INSERT INTO employees (id, first_name, last_name, role_id, username, password)
 			 VALUES (?, ?, ?, ?, ?)`,
-			[firstname, lastname, role_id, username, hash]
+			[id, firstname, lastname, role_id, username, hash]
 		);
 		res.redirect("/employees");
 	} catch (err) {
@@ -52,7 +52,7 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	const [{ affectedRows }] = await db.query(`DELETE FROM employees WHERE id = ?`, [
 		req.params.employeeId
 	]);
-
+	console.log(affectedRows)
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });
@@ -61,13 +61,15 @@ router.route("/requests").post(async (req, res) => {
 	try {
 		const insert_date = new Date();
 
-		const { request_style, add_notes } = req.body;
+		const {request_style, add_notes} = req.body;
+
+		const requestor_id = req.session.userId
 
 		await db.query(
 			`INSERT INTO requests (requestor_id, style, notes, request_date)
 		     VALUES (?,?,?,?)
 		     `,
-			[req.session.userId, request_style, add_notes, insert_date]
+			[requestor_id, request_style, add_notes, insert_date]
 		);
 		res.redirect("/requests");
 	} catch (err) {

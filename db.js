@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 
 const config = process.env.JAWSDB_URL || {
-	connectionLimit: 50,
+	connectionLimit: 10,
 	host: "localhost",
 	user: "root",
 	database: "toot_app_db",
