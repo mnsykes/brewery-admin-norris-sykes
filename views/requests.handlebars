@@ -28,48 +28,40 @@
     </section>
     <section>
         <div class="table-responsive">
-            <div style="overflow-x:auto;">
-                <table class="table">
-                    <thead class="requests-bg_dark">
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">style</th>
-                            <th scope="col">requested by</th>
-                            <th scope="col">request date</th>
-                            <th scope="col">approved by</th>
-                            <th scope="col">approval date</th>
-                            <th scope="col">actions</th>
-                        </tr>
+            <table class="table">
+                <thead class="requests-bg_dark">
+                    <tr>
+                        <th>style</th>
+                        <th>requested by</th>
+                        <th>request date</th>
+                        <th>approved by</th>
+                        <th>approval date</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each request}}
+                    <tr>
+                        <td>{{style}}</td>
+                        <td>{{requestor}}</td>
+                        <td>{{request_date}}</td>
+                        <td>{{approver}}</td>
+                        <td>{{approval_date}}</td>
+                        <td>
+                        {{#if isManager}}
+                            <button class="btn btn-sm delete-btn rounded requests-bg_light" data-request-id="{{id}}">delete</button>
+                            {{#if isApproved}}
+                            <button class="btn btn-sm approve-btn rounded requests-bg_light" data-request-id="{{id}}" disabled>approve</button>
+                            {{else}}
+                            <button class="btn btn-sm approve-btn rounded requests-bg_light" data-request-id="{{id}}">approve</button>
+                            {{/if}}
+                        {{/if}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">{{notes}}</td>
+                    </tr>
 
-                    </thead>
-                    <tbody>
-                        {{#each requests}}
-                        <tr>
-                            <th scope="row"></th>
-                            <td>{{style}}</td>
-                            <td>{{requestor_id}}</td>
-                            <td>{{request_date}}</td>
-                            <td>{{approver_id}}</td>
-                            <td>{{approval_date}}</td>
-                            <td>
-                                <button class="btn btn-sm delete-btn rounded
-                                    requests-bg_light" data-request-id="{{id}}">delete</button>
-                                <button class="btn btn-sm approve-btn rounded
-                                    requests-bg_light" data-request-id="{{id}}">approve</button>
-                            </td>
-                        </tr>
-                        <thead class="requests-bg_dark">
-                            <tr>
-                                <th scope="column">notes</th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td scope="row">{{notes}}</td>
-                            <span class="border-bottom border-dark"></span>
-                        </tr>
-                        <div>
-                        </div>
-                    </div>
                     {{/each}}
                 </tbody>
             </table>

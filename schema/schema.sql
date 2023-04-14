@@ -7,7 +7,6 @@ CREATE TABLE roles (
     role VARCHAR(30) NOT NULL
 );
 
-
 CREATE TABLE employees (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
@@ -24,9 +23,59 @@ CREATE TABLE requests (
   requestor_id INT NOT NULL,
   style VARCHAR(100) NOT NULL,
   notes VARCHAR(200),
-  request_date VARCHAR(50),
-  approver_id INT,
-  approval_date VARCHAR(50),
-  FOREIGN KEY (approver_id)
-    REFERENCES employees (id)
+  request_date VARCHAR(50)
 );
+
+CREATE TABLE approvals (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    approver_id INT NOT NULL,
+    approval_date VARCHAR(50) NOT NULL,
+    request_id INT NOT NULL,
+    FOREIGN KEY (request_id)
+      REFERENCES requests (id)
+);
+
+CREATE TABLE inventory (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    style VARCHAR(50) NOT NULL,
+    ibu INT NOT NULL,
+    srm INT NOT NULL,
+    abv INT NOT NULL,
+    brewed_date VARCHAR(30)
+);
+
+CREATE TABLE on_tap (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    tap_name VARCHAR(15),
+    beer_id INT,
+    date_added VARCHAR(50),
+    date_removed VARCHAR(50),
+    added_by INT,
+    removed_by INT,
+    FOREIGN KEY (added_by)
+      REFERENCES employees (id),
+    FOREIGN KEY (removed_by)
+      REFERENCES employees (id),
+    FOREIGN KEY (beer_id)
+      REFERENCES inventory (id)
+);
+
+CREATE TABLE next_on_tap (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    tap_name VARCHAR(15),
+    beer_id INT,
+    date_added VARCHAR(50),
+    date_removed VARCHAR(50),
+    added_by INT,
+    removed_by INT,
+    FOREIGN KEY (added_by)
+      REFERENCES employees (id),
+    FOREIGN KEY (removed_by)
+      REFERENCES employees (id),
+    FOREIGN KEY (beer_id)
+      REFERENCES inventory (id)
+);
+
+

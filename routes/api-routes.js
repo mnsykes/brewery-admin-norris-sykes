@@ -1,12 +1,10 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const db = require("../db");
-const fs = require('fs');
-const express = require('express')
+const fs = require("fs");
+const express = require("express");
 const app = express();
 const checkAuth = require("../middleware/auth");
-
-
 
 router.post("/login", async (req, res) => {
 	try {
@@ -22,6 +20,7 @@ router.post("/login", async (req, res) => {
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
 		req.session.roleId = user.role_id;
+
 		req.session.save(() => res.redirect("/dashboard"));
 	} catch (err) {
 		return res.status(500).send(err);
@@ -35,7 +34,7 @@ router.route("/employees").post(async (req, res) => {
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
-		console.log(hash);
+
 		const role_id = parseInt(role);
 		await db.query(
 			`INSERT INTO employees (id, first_name, last_name, role_id, username, password)
@@ -89,40 +88,29 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	else res.status(404).send("Cart item not found");
 });
 
-router
-	.route("/stylesearch")
-	.post(async (req, res) => {
-		try{
-			var body = req.body
-			var res_body = {
-				category: body.category,
-				name: body.name
-			};
-			res.render('beer', res_body)
-		}
-		catch(err){
-			console.log(error)
-	
-		}
-	
-
-	
-	})
-
-
+router.route("/stylesearch").post(async (req, res) => {
+	try {
+		var body = req.body;
+		var res_body = {
+			category: body.category,
+			name: body.name
+		};
+		res.render("beer", res_body);
+	} catch (err) {
+		console.log(error);
+	}
+});
 
 router.route("/requests/:requestId").put(async (req, res) => {
 	const approval_date = new Date();
 
 	await db.query(
 		`
-		UPDATE requests
-		SET approver_id = ?, approval_date = ?
-		WHERE id = ?`,
+		INSERT INTO approvals (approver_id, approval_date, request_id)
+		VALUES (?, ?, ?)`,
 		[req.session.userId, approval_date, req.params.requestId]
 	);
 
 	res.redirect("/requests");
 });
 module.exports = router;
-
