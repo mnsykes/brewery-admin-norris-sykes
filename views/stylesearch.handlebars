@@ -1,31 +1,32 @@
 {{> header}}
-<main class="container" >
+<script type="module" src="/button-load.js"></script>
+<main class="container">
     <section class="row mb-5">
-        <form id="search_box" class="rounded search-bg_dark p-4" action="/stylesearch/style" method="POST">
+        <form id="search_box" class="rounded search-bg_dark p-4"
+            action="/stylesearch/style" method="POST">
             <div class="input-group mb-3">
-                <span class="input-group-text search-bg_light" id="style_search">category: </span>
+                <span class="input-group-text search-bg_light"
+                    id="style_search">style: </span>
                 <div id="brandFilter">
-                    {{!-- <input name="submit" for="beers-list" onkeyup="getData()" id="searchbar1" type="text"
-                        placeholder="Choose category" /> --}}
-                    <select name="catList" class="form-control" type="text" id="category-dropdown"> {{#each beerData}}
-                        <option value="{{this.category}}" id="category-option" placeholder="category">{{this.category}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text search-bg_light" id="style_search">style: </span>
-                <div id="brandFilter">
-                    {{!-- <input name="submit" for="beers-list" onkeyup="getData()" id="searchbar1" type="text"
-                        placeholder="Choose category" /> --}}
-                    <select name="nameList" class="form-control" type="text" id="style-dropdown"> {{#each beerData}}
+                    <select name="nameList" class="form-control" type="text"
+                        id="style-dropdown">
+                        <option disabled="disabled" selected="selected">Select
+                            an option.</option>
+                        {{#each beerData}}
                         <option value="{{this.name}}" class="name-option">{{this.name}}</option>
                         {{/each}}
                     </select>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <button type="submit" class="btn search-bg_light m-space">Submit</button>
+            <div class="col-sm-12" id="button-container">
+                <button type="submit" class="btn search-bg_light btn-primary
+                    m-space" id="existing-button">Submit</button>
+                <button id="loading-button" class="btn search-bg_light m-space
+                    btn-primary d-none">
+                    <span class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    loading beer
+                </button>
             </div>
         </form>
     </section>
@@ -38,8 +39,10 @@
             <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">category</h3>
                 <p>{{this.category}}</p>
+            </div>
+            <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">style</h3>
-                <p>{{this.name}}</p>
+                <p><strong>{{this.name}}</strong></p>
             </div>
             <div class="row">
                 <h3 class="badge rounded-pill search-bg_light p-3">description</h3>
@@ -47,7 +50,8 @@
             </div>
             <div id="beer_stats" class="row">
                 <div class="col-sm-3 text-center">
-                    <h4 class="badge rounded-pill search-bg_light p-2 text-center">ibu</h4>
+                    <h4 class="badge rounded-pill search-bg_light p-2
+                        text-center">ibu</h4>
                     <p class="text-center">{{ibumin}} - {{ibumax}}</p>
                 </div>
                 <div class="col-sm-3 text-center">
@@ -58,9 +62,23 @@
                     <h4 class="badge rounded-pill search-bg_light p-2">abv</h4>
                     <p>{{abvmin}} - {{abvmax}}</p>
                 </div>
-                <div class="col-sm-3 text-center">
-                    <h4 class="badge rounded-pill search-bg_light p-2">examples</h4>
+                <div class="row">
+                    <h4 class="badge rounded-pill search-bg_light p-3">examples</h4>
                     <p> {{commercialexamples}}</p>
+                </div>
+                <div class="row">
+                    <h4 class="badge rounded-pill search-bg_light p-3"> common
+                        ingredients</h4>
+                    <p> {{characteristicingredients}}</p>
+                </div>
+                <div class="row">
+                    <h4 class="badge rounded-pill search-bg_light p-3">
+                        mouthfeel</h4>
+                    <p> {{mouthfeel}}</p>
+                </div>
+                <div class="row">
+                    <h4 class="badge rounded-pill search-bg_light p-3"> flavor</h4>
+                    <p> {{flavor}}</p>
                 </div>
             </div>
             {{/with}}

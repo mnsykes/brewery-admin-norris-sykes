@@ -33,3 +33,22 @@ a {
 .employees-bg_light {
 	background-color: #5fbbb5;
 }
+.thick-line {
+	border: 20px #608253 solid;
+
+}
+
+.table{
+	display: block !important;
+	overflow-x: auto !important;
+	width: 100% !important;
+  }
+
+th {
+overflow-wrap: normal;
+
+}
+
+td {
+	overflow-wrap: normal;
+}
