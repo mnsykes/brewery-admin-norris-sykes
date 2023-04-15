@@ -34,7 +34,7 @@ router.get("/dashboard", async (req, res) => {
 		heading: "Dashboard",
 		title: "toot | dashboard"
 	};
-
+	console.log(data.first_name)
 	pages = [
 		{
 			name: "Style Search",
