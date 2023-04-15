@@ -35,12 +35,11 @@ router.route("/employees").post(async (req, res) => {
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
-		console.log(hash);
 		const role_id = parseInt(role);
 		await db.query(
-			`INSERT INTO employees (id, first_name, last_name, role_id, username, password)
+			`INSERT INTO employees (first_name, last_name, role_id, username, password)
 			 VALUES (?, ?, ?, ?, ?)`,
-			[id, firstname, lastname, role_id, username, hash]
+			[firstname, lastname, role_id, username, hash]
 		);
 		res.redirect("/employees");
 	} catch (err) {

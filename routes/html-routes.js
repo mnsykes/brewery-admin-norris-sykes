@@ -164,14 +164,13 @@ router.post("/stylesearch/style", async (req, res) => {
 	});
 	const image_url = response.data.data[0].url;
 
-	// Define the data you want to send in the POST request
-	const postData = { image_url: image_url };
-
 	res.render("stylesearch", {
 		loggedIn: req.session.loggedIn,
 		beerData,
 		results,
-		image_url
+		image_url,
+		image: 'images/toot.png'
+
 	})
 
 });
