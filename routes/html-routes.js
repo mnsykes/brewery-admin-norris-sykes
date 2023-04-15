@@ -136,9 +136,7 @@ router.post("/stylesearch/style", async (req, res) => {
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
 			if (beerData[i].name === nameList) {
-				console.log('this is fine')
 				matchingBeer = beerData[i]
-				console.log(beerData[i].categorynumber)
 				break;
 			} 
 		}

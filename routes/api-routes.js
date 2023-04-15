@@ -51,7 +51,6 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	const [{ affectedRows }] = await db.query(`DELETE FROM employees WHERE id = ?`, [
 		req.params.employeeId
 	]);
-	console.log(affectedRows)
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });
