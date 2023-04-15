@@ -17,6 +17,7 @@ router.post("/login", async (req, res) => {
 		const isCorrectPassword = await bcrypt.compare(password, user.password);
 		if (!isCorrectPassword) return res.status(400).send("Login error");
 
+		req.session.username = employees.username
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
 		req.session.roleId = user.role_id;
@@ -34,12 +35,11 @@ router.route("/employees").post(async (req, res) => {
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
-
 		const role_id = parseInt(role);
 		await db.query(
-			`INSERT INTO employees (id, first_name, last_name, role_id, username, password)
+			`INSERT INTO employees (first_name, last_name, role_id, username, password)
 			 VALUES (?, ?, ?, ?, ?)`,
-			[id, firstname, lastname, role_id, username, hash]
+			[firstname, lastname, role_id, username, hash]
 		);
 		res.redirect("/employees");
 	} catch (err) {
@@ -52,7 +52,6 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	const [{ affectedRows }] = await db.query(`DELETE FROM employees WHERE id = ?`, [
 		req.params.employeeId
 	]);
-	console.log(affectedRows)
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });
@@ -112,5 +111,32 @@ router.route("/requests/:requestId").put(async (req, res) => {
 	);
 
 	res.redirect("/requests");
+});
+
+router.route("/tapplan/now/:tapId").post(async (req, res) => {
+	const {beerId, tapId, name} = req.body
+	console.log(req.body)
+	await db.query(`INSERT INTO on_tap (beer_id, name)
+	   VALUES (?,?) WHERE id=?`, [
+		   beerId, 
+		   name,
+		   tapId
+	   ]);
+   
+	   if (affectedRows === 1) res.status(204).end();
+	   else res.status(404).send("id not found");
+});
+
+router.route("/tapplan/next/:tapId").post(async (req, res) => {
+const {beerId, tapId, name} = req.body
+ await db.query(`INSERT INTO next_on_tap (beer_id, name)
+	VALUES (?,?) WHERE id=? `, [
+		beerId,
+		name,
+		tapId
+	]);
+
+	if (affectedRows === 1) res.status(204).end();
+	else res.status(404).send("id not found");
 });
 module.exports = router;
