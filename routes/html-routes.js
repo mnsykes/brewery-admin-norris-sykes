@@ -59,7 +59,8 @@ router.get("/dashboard", async (req, res) => {
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
 			route: "/employees"
-		}
+		},
+
 	];
 	res.render("dashboard", {
 		page: pages,
@@ -102,17 +103,15 @@ router.get("/stylesearch", async (req, res) => {
 		const beerJSON = await axios.get(apiurl);
 		const beerData = beerJSON.data;
 
-		// Possibly change dataLoad to data
-		const dataLoad = {
+		const data = {
 			loggedIn: req.session.loggedIn,
 			heading: "Style Search",
 			headerBg: "search-bg_dark",
-			beerimg: "/images/pils.jpeg",
 			title: "toot | style search"
 		};
 		res.render("stylesearch", {
 			beerData,
-			dataLoad
+			data
 		});
 	} catch (error) {
 		console.error("There was a problem fetching the JSON file:", error);
@@ -152,7 +151,7 @@ router.post("/stylesearch/style", async (req, res) => {
 	const results = filterKeys(beerData, {
 		nameList
 	})
-	//deal with api image data
+	//deal with api image data, take api key from open ai 
 
 	const configuration = new Configuration({
 		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
@@ -166,15 +165,17 @@ router.post("/stylesearch/style", async (req, res) => {
 		n: 1,
 		size: "1024x1024",
 	});
+
+	//getting the first selection out of the ai generated data, inserting it into an embeddable
+	//url to place into the image slot
 	const image_url = response.data.data[0].url;
 
 	res.render("stylesearch", {
+		img: 'public/images/toot.png',
 		loggedIn: req.session.loggedIn,
 		beerData,
 		results,
 		image_url,
-		image: 'images/toot.png'
-
 	})
 
 });
