@@ -36,11 +36,23 @@ async function removeEmployee(e) {
 	window.location.replace("/employees");
 }
 if (typeof document !== "undefined") {
-	for (const btn of document.querySelectorAll(".emp-action-btn")) {
+	for (const btn of document.querySelectorAll(".emp-delete-btn")) {
 		btn.onclick = removeEmployee;
 	}
 }
+async function updateEmployee(e) {
+	const employeeId = e.target.getAttribute("data-request-id");
 
+	await fetch(`/admin-update-employee/${employeeId}`, {
+		method: "get"
+	});
+	window.location.replace("/admin-update-employee");
+}
+if (typeof document !== "undefined") {
+	for (const btn of document.querySelectorAll(".emp-update-btn")) {
+		btn.onclick = updateEmployee;
+	}
+}
 
 //filtering out names according to categories
 async function filterStyles(e) {
@@ -72,7 +84,6 @@ async function filterStyles(e) {
 		styleDropdown.innerHTML = styleOptions;
 	});
 }
-
 
 // Get the URL of the current page
 const currentUrl = window.location.href;
