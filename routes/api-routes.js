@@ -100,7 +100,7 @@ router.route("/employees").post(async (req, res) => {
 		await db.query(
 			`INSERT INTO employees (first_name, last_name, email, role_id, username, password, question_id, security_answer)
 			 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-			[firstname, lastname, role_id, username, hash, secret_question, hash_secret_answer]
+			[firstname, lastname, role_id, email, username, hash, secret_question, hash_secret_answer]
 		);
 		res.redirect("/employees");
 	} catch (err) {
