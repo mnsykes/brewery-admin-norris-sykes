@@ -231,7 +231,8 @@ router.route("/tapplan/next").post(async (req, res) => {
 			WHERE id = ?`,
 			[beerId, date_added, req.session.userId, tapId]
 		);
-		res.redirect("/tapplan");
+		
+		req.session.save(() => res.redirect("/tapplan"));
 	} catch (err) {
 		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
 	}
@@ -245,6 +246,8 @@ router.route("/tapplan/now/:tapId").put(async (req, res) => {
 
 	if (beerDelete === 1) res.status(204).end();
 	else res.status(404).send("beer not found");
+
+	req.session.save(() => res.redirect("/tapplan"));
 });
 
 
@@ -255,6 +258,8 @@ router.route("/tapplan/next/:tapId").put(async (req, res) => {
 
 	if (nextDelete === 1) res.status(204).end();
 	else res.status(404).send("beer not found");
+
+	req.session.save(() => res.redirect("/tapplan"));
 });
 
 // END TAP PLAN

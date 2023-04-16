@@ -1,10 +1,9 @@
 {{#if loggedIn}}
     {{> header}}
 {{/if}}
-
+<h2 class="rounded employees-bg_light p-3 mb-4"> update employee profile </h1>
 <main class="container">
     <section class="row mb-5">
-        <h1>{{heading}}</h1>
         <form id="login" class="rounded employees-bg_dark p-4" action="api/update-employee/{{user.id}}" method="POST">
             <div class="input-group mb-3">
                 <label for="firstname" class="input-group-text employees-bg_light">first name: </label>

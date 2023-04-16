@@ -1,5 +1,6 @@
 {{> header}}
 <script type="module" src="/button-load.js"></script>
+<h2 class="rounded search-bg_light p-3 mb-4"> search for beer styles </h1>
 <main class="container">
     <section class="row mb-5">
         <form id="search_box" class="rounded search-bg_dark p-4"
@@ -10,8 +11,8 @@
                 <div id="brandFilter">
                     <select name="nameList" class="form-control" type="text"
                         id="style-dropdown">
-                        <option disabled="disabled" selected="selected">Select
-                            an option.</option>
+                        <option disabled="disabled" selected="selected">select
+                            a beer style</option>
                         {{#each beerData}}
                         <option value="{{this.name}}" class="name-option">{{this.name}}</option>
                         {{/each}}

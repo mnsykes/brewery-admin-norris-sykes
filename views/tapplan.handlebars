@@ -1,4 +1,5 @@
 {{> header}}
+<h2 class="rounded tapplan-bg_light p-3 mb-4"> add, update, and delete tap plan </h1>
 <main class="container">
     <section class="row mb-5">
         <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4"
@@ -7,7 +8,7 @@
                 <span class="input-group-text tapplan-bg_light" id="on-now">on
                     now: </span>
                 <select name="beerId" class="on-now">
-                    <option value="">select beer:</option>
+                    <option value="">Select beer</option>
                     {{#each beer}}
                     <option value="{{id}}" data-ontap-id="{{id}}">{{name}}</option>
                     {{/each}}
@@ -49,7 +50,7 @@
                 <span class="input-group-text tapplan-bg_light" id="on-after">select
                     tap: </span>
                 <select name="tapId" class="on-next">
-                    <option value="">select tap:</option>
+                    <option value="">Select tap</option>
                     {{#each onTap}}
                     <option>
                         {{id}}
@@ -67,7 +68,7 @@
     <section>
         <div class="row">
             <div class="col-sm-6">
-                <h3>on tap now</h3>
+                <h3 class="rounded tapplan-bg_light p-4">on tap now</h3>
                 <table class="table">
                     <thead>
                         <tr>
@@ -94,7 +95,7 @@
 
             </div>
             <div class="col-sm-6">
-                <h3>next on tap</h3>
+                <h3 class="rounded tapplan-bg_light p-4">next on tap</h3>
                 <table class="table">
                     <thead>
                         <tr>

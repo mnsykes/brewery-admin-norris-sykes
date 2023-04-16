@@ -87,7 +87,7 @@ router.get("/dashboard", checkAuth, async (req, res) => {
 			route: "/employees"
 		},
 		{
-			name: "update employee profile",
+			name: "Update Employee Profile",
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
 			route: "/update-employee"
@@ -146,7 +146,7 @@ router.get("/update-employee", async (req, res) => {
 		role: roles,
 		user: user_data,
 		loggedIn: req.session.loggedIn,
-		heading: "update employee profile",
+		heading: "Update Employee Profile",
 		headerBg: "employees-bg_dark",
 		title: "toot | update employee"
 	};
