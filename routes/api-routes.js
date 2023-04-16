@@ -21,7 +21,6 @@ router.post("/login", async (req, res) => {
 		`,
 			[username]
 		);
-
 		if (!user) return res.status(400).send("User not found");
 		const isCorrectPassword = await bcrypt.compare(password, user.password);
 
@@ -122,6 +121,7 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 
 // START UPDATE EMPLOYEES
 router.route("/update-employee/:employeeId").post(async (req, res) => {
+
 	try {
 		const { email, secret_question, secret_answer, password, confirm_password } = req.body;
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
@@ -139,6 +139,7 @@ router.route("/update-employee/:employeeId").post(async (req, res) => {
 
 		res.redirect("/update-employee");
 	} catch (err) {}
+
 });
 
 // END UPDATE EMPLOYEES
@@ -172,7 +173,7 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	]);
 
 	if (affectedRows === 1) res.status(204).end();
-	else res.status(404).send("Cart item not found");
+	else res.status(404).send("request not found");
 });
 
 router.route("/requests/:requestId").put(async (req, res) => {
@@ -235,10 +236,35 @@ router.route("/tapplan/next").post(async (req, res) => {
 			WHERE id = ?`,
 			[beerId, date_added, req.session.userId, tapId]
 		);
-		res.redirect("/tapplan");
+		
+		req.session.save(() => res.redirect("/tapplan"));
 	} catch (err) {
 		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
 	}
+});
+
+router.route("/tapplan/now/:tapId").put(async (req, res) => {
+
+	const [{ beerDelete }] = await db.query(`UPDATE on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`, [
+		req.params.tapId
+	]);
+
+	if (beerDelete === 1) res.status(204).end();
+	else res.status(404).send("beer not found");
+
+	req.session.save(() => res.redirect("/tapplan"));
+});
+
+
+router.route("/tapplan/next/:tapId").put(async (req, res) => {
+	const [{ nextDelete }] = await db.query(`UPDATE next_on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`, [
+		req.params.tapId
+	]);
+
+	if (nextDelete === 1) res.status(204).end();
+	else res.status(404).send("beer not found");
+
+	req.session.save(() => res.redirect("/tapplan"));
 });
 
 // END TAP PLAN

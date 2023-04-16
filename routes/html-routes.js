@@ -13,10 +13,18 @@ const app = express();
 router.get("/", (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
-		heading: "Login",
+		heading: "login to TOOT, the taproom management app.",
 		title: "toot | login"
 	};
 	res.render("index", data);
+});
+
+router.get("/login", async (req, res) => {
+	res.render("login", {
+		loggedIn: req.session.loggedIn,
+		heading: "login to TOOT, the taproom management app.",
+		title: "Brewery Admin"
+	});
 });
 // END LOGIN
 
@@ -41,12 +49,17 @@ router.get("/dashboard", checkAuth, async (req, res) => {
 		FROM requests r
 		LEFT JOIN approvals a ON a.request_id = r.id
 	`);
+	const [[employee]] = await db.query(`
+    SELECT first_name FROM employees WHERE id = ?
+`, [req.session.userId]);
+
 	const data = {
+		username: req.session.username,
 		loggedIn: req.session.loggedIn,
 		heading: "Dashboard",
-		title: "toot | dashboard"
+		title: "toot | dashboard",
+		firstName: req.session.firstName
 	};
-
 	pages = [
 		{
 			name: "Style Search",
@@ -74,7 +87,7 @@ router.get("/dashboard", checkAuth, async (req, res) => {
 			route: "/employees"
 		},
 		{
-			name: "update employee profile",
+			name: "Update Employee Profile",
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
 			route: "/update-employee"
@@ -142,7 +155,7 @@ router.get("/update-employee", async (req, res) => {
 		question: questions,
 		user: user_data,
 		loggedIn: req.session.loggedIn,
-		heading: "update employee profile",
+		heading: "Update Employee Profile",
 		headerBg: "employees-bg_dark",
 		title: "toot | update employee"
 	};
@@ -249,10 +262,7 @@ router.post("/stylesearch/style", async (req, res) => {
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
 			if (beerData[i].name === nameList) {
-				console.log("this is fine");
 				matchingBeer = beerData[i];
-				console.log(beerData[i].categorynumber);
-
 				matchingBeer = beerData[i];
 
 				break;
@@ -268,7 +278,9 @@ router.post("/stylesearch/style", async (req, res) => {
 	});
 	//deal with api image data
 
-	//deal with api image data, take api key from open ai
+	
+	//deal with api image data, take api key from open ai 
+
 
 	const configuration = new Configuration({
 		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
@@ -294,7 +306,7 @@ router.post("/stylesearch/style", async (req, res) => {
 		results,
 		image_url
 	});
-});
+})
 // END STYLE SEARCH
 
 // START TAP PLAN

@@ -1,20 +1,26 @@
 {{> header}}
-<div class="container">
-    <h1 class="text-center mt-5">{{data.heading}}</h1>
+<div class="p-5 pb-1 mb-0">
+    <h1 class="mt-3 pt-1 show" id="1">Welcome, {{data.username}}</h1>
+    <h1 class="mt-0 mb-4 hide show-stay" id="2"> Dashboard</h1>
+</div>
+<div class="container w-75">
     {{#each page}}
-    <div class="row {{bgColor}} rounded w-50 p-5 mb-5">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-9">
-            <a href="{{route}}" class="btn rounded {{btnColor}}">
-                {{name}}
+    <div class="row {{bgColor}} w-75 rounded p-5 mb-3 mx-auto">
+        <div class="col-sm-10">
+            <a href="{{route}}" class="btn rounded p-3 {{btnColor}}">
+                <h5>
+                    {{name}}
+                </h5>
                 {{#if isRequest}}
                 <span class="badge badge-light">{{numRequests}}</span>
                 {{/if}}
             </a>
         </div>
+
     </div>
     {{/each}}
-
 </div>
-
-
+<div class="row">
+    <h1 class="p-5 mb-5"> Welcome to TOOT, the brewery app. For your taproom
+        management needs. </h1>
+</div>
