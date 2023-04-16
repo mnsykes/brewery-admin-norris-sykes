@@ -4,7 +4,10 @@ USE toot_app_db;
 
 CREATE TABLE roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    role VARCHAR(30) NOT NULL
+    role VARCHAR(30) NOT NULL,
+    is_manager BOOLEAN,
+    is_brewhouse BOOLEAN,
+    is_taproom BOOLEAN
 );
 
 CREATE TABLE employees (
@@ -31,6 +34,7 @@ CREATE TABLE approvals (
     approver_id INT NOT NULL,
     approval_date VARCHAR(50) NOT NULL,
     request_id INT NOT NULL,
+    is_approved BOOLEAN,
     FOREIGN KEY (request_id)
       REFERENCES requests (id)
 );

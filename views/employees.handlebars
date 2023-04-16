@@ -1,6 +1,7 @@
 {{> header}}
 <script type="module" src="remove-emp-btn.js"></script>
 <main class="container">
+  
     <section class="row mb-5">
         <form id="login" class="rounded employees-bg_dark p-4"
             action="api/employees" method="POST">
@@ -54,11 +55,17 @@
                     aria-describedby="username"
                     />
             </div>
+            {{!-- 
+                Password and Confirm Password can be text
+                inputs instead of password because we don't need
+                to hide this since management is creating a temp
+                password for the employee
+             --}}
             <div class="input-group mb-3">
                 <label for="password" class="input-group-text
                     employees-bg_light">Password: </label>
                 <input
-                    type="password"
+                    type="text"
                     class="form-control"
                     id="password"
                     name="password"
@@ -71,7 +78,7 @@
                 <label for="confirm_password" class="input-group-text
                     employees-bg_light">Confirm your password: </label>
                 <input
-                    type="password"
+                    type="text"
                     class="form-control"
                     id="confirm_password"
                     name="confirm_password"
@@ -105,8 +112,7 @@
                         <td>{{last_name}}</td>
                         <td>{{role}}</td>
                         <td>
-                            <button class="btn btn-sm rounded
-                                requests-bg_light emp-action-btn" data-request-id="{{id}}"> delete </button>
+                            <button class="btn btn-sm rounded requests-bg_light emp-action-btn" data-request-id="{{id}}">delete</button>
                         </td>
                     </tr>
                     {{/each}}

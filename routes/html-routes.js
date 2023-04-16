@@ -29,6 +29,11 @@ router.get("/login", async (req, res) => {
 
 // START DASHBOARD
 router.get("/dashboard", async (req, res) => {
+	const [[requests]] = await db.query(`
+		SELECT COUNT(r.id) - COUNT(a.id) AS NumRequests
+		FROM requests r
+		LEFT JOIN approvals a ON a.request_id = r.id
+	`);
 	const data = {
 		loggedIn: req.session.loggedIn,
 		heading: "Dashboard",
@@ -52,7 +57,8 @@ router.get("/dashboard", async (req, res) => {
 			name: "Requests",
 			bgColor: "requests-bg_dark",
 			btnColor: "requests-bg_light",
-			route: "/requests"
+			route: "/requests",
+			numRequests: requests
 		},
 		{
 			name: "Employees",
@@ -69,6 +75,7 @@ router.get("/dashboard", async (req, res) => {
 		title: "toot | brewery",
 		data
 	});
+	console.log(pages);
 });
 // END DASHBOARD
 
@@ -77,11 +84,12 @@ router.get("/employees", checkAuth, async (req, res) => {
 	const [roles] = await db.query(`SELECT * FROM roles`);
 	const [employees] = await db.query(`
 		SELECT 
-		employees.id,
+		employees.id AS employee_id,
 		employees.first_name,
 		employees.last_name,
-		roles.*
-		FROM employees JOIN roles ON employees.role_id = roles.id
+		roles.role
+		FROM employees 
+		JOIN roles ON employees.role_id = roles.id
 	`);
 
 	const data = {
@@ -90,9 +98,10 @@ router.get("/employees", checkAuth, async (req, res) => {
 		loggedIn: req.session.loggedIn,
 		heading: "Employees",
 		headerBg: "employees-bg_dark",
-		title: "toot | employees"
+		title: "toot | employees",
+		roleId: 1
 	};
-
+	console.log(data);
 	res.render("employees", data);
 });
 // END EMPLOYEES
@@ -119,41 +128,44 @@ router.get("/stylesearch", async (req, res) => {
 });
 
 router.post("/stylesearch/style", async (req, res) => {
-
 	//deal with beer data, post category and style
-	const beerJSON = await axios.get(apiurl)
-	const beerData = beerJSON.data
-	exports.beerData = beerData
-	const {
-		catList,
-		nameList
-	} = req.body
+	const beerJSON = await axios.get(apiurl);
+	const beerData = beerJSON.data;
+	exports.beerData = beerData;
+	const { catList, nameList } = req.body;
 
-	function filterKeys(beerData, {
-		nameList
-	}) {
-
+	function filterKeys(beerData, { nameList }) {
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
 			if (beerData[i].name === nameList) {
+
+				console.log("this is fine");
+				matchingBeer = beerData[i];
+				console.log(beerData[i].categorynumber);
+
 				matchingBeer = beerData[i]
+
 				break;
-			} 
+			}
 		}
 
-		if (!matchingBeer) res.redirect('/stylesearch')
+		if (!matchingBeer) res.redirect("/stylesearch");
 		return matchingBeer;
-
 	}
 
 	const results = filterKeys(beerData, {
 		nameList
+
+	});
+	//deal with api image data
+
 	})
 	//deal with api image data, take api key from open ai 
 
+
 	const configuration = new Configuration({
 		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
-		apiKey: process.env.OPENAI_API_KEY,
+		apiKey: process.env.OPENAI_API_KEY
 	});
 	const openai = new OpenAIApi(configuration);
 
@@ -161,7 +173,7 @@ router.post("/stylesearch/style", async (req, res) => {
 	const response = await openai.createImage({
 		prompt: nameList + "in a glass with an art deco background.",
 		n: 1,
-		size: "1024x1024",
+		size: "1024x1024"
 	});
 
 	//getting the first selection out of the ai generated data, inserting it into an embeddable
@@ -173,10 +185,9 @@ router.post("/stylesearch/style", async (req, res) => {
 		loggedIn: req.session.loggedIn,
 		beerData,
 		results,
-		image_url,
-	})
+		image_url
+	});
 
-});
 // END STYLE SEARCH
 
 // START TAP PLAN
@@ -195,17 +206,25 @@ AT YOUR BREWERY.
 router.get("/tapplan", async (req, res) => {
 	try {
 		const [on_tap_data] = await db.query(`
-			SELECT * FROM on_tap
-		`);
+			SELECT ot.*, inv.name AS beer_name, inv.style AS beer_style
+			FROM on_tap ot 
+			LEFT JOIN inventory inv ON inv.id = ot.beer_id
+			ORDER BY id ASC
+			`);
 
 		const [next_on_tap_data] = await db.query(`
-			SELECT * FROM on_tap
-			ORDER BY id DESC
+			SELECT ot.*, inv.name AS beer_name, inv.style AS beer_style
+			FROM next_on_tap ot 
+			LEFT JOIN inventory inv ON inv.id = ot.beer_id
+			ORDER BY id ASC
 		`);
 
 		const [beers] = await db.query(`
-			SELECT name, style
-			FROM inventory
+			SELECT inv.* 
+			FROM inventory inv 
+			LEFT JOIN on_tap ot ON ot.beer_id = inv.id
+			LEFT JOIN on_tap nt ON nt.beer_id = inv.id
+			WHERE ot.beer_id IS NULL AND nt.beer_id IS NULL
 		`);
 
 		const data = {
@@ -215,10 +234,9 @@ router.get("/tapplan", async (req, res) => {
 			loggedIn: req.session.loggedIn,
 			heading: "Tap Plan",
 			headerBg: "tapplan-bg_dark",
-			title: "toot | tap plan",
-			arrow: "arrow fa-sharp fa-solid fa-arrow-left fa-2xl"
+			title: "toot | tap plan"
 		};
-
+		console.log(data);
 		res.render("tapplan", data);
 	} catch (err) {
 		return res.status(500).send(` ${err.message} || ${err.sqlMessage}`);
@@ -233,6 +251,7 @@ router.get("/requests", async (req, res) => {
 	SELECT
 	r.*,
 	a.approval_date,
+	a.is_approved,
 	CONCAT_WS(' ', emp1.first_name, emp1.last_name) AS requestor,
 	CONCAT_WS(' ', emp2.first_name, emp2.last_name) AS approver
 	FROM requests r
@@ -242,29 +261,15 @@ router.get("/requests", async (req, res) => {
 	`
 	);
 
-	// set management level to show/hide action buttons
-	// set approval status to disable button if approved
-	requests.map((r) => {
-		if (req.session.roleId == 1) {
-			r.isManager = true;
-		} else {
-			r.isManger = false;
-		}
-
-		if (r.approver.length) {
-			r.isApproved = true;
-		} else {
-			r.isApproved = false;
-		}
-	});
 	const data = {
-		requests: requests,
+		request: requests,
 		heading: "Dashboard",
 		loggedIn: req.session.loggedIn,
 		title: "toot | requests",
-		headerBg: "requests-bg_dark"
+		headerBg: "requests-bg_dark",
+		isManager: req.session.isManager
 	};
-
+	console.log(data);
 	res.render("requests", data);
 });
 // END REQUESTS

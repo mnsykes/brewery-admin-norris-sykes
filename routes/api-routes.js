@@ -6,35 +6,49 @@ const express = require("express");
 const app = express();
 const checkAuth = require("../middleware/auth");
 
+// START LOGIN
 router.post("/login", async (req, res) => {
 	try {
 		const { username, password } = req.body;
 
 		if (!(username && password)) return res.status(400).send("Must include username and password");
-		const [[user]] = await db.query(`SELECT * FROM employees WHERE username = ?`, [username]);
-
+		const [[user]] = await db.query(
+			`
+			SELECT emp.id, emp.username, emp.password, r.is_manager, r.is_brewhouse, r.is_taproom 
+			FROM employees emp
+			LEFT JOIN roles r ON emp.role_id = r.id
+			WHERE username = ?;
+		`,
+			[username]
+		);
+		console.log(user);
 		if (!user) return res.status(400).send("User not found");
 		const isCorrectPassword = await bcrypt.compare(password, user.password);
+
 		if (!isCorrectPassword) return res.status(400).send("Login error");
 
 		req.session.username = employees.username
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
-		req.session.roleId = user.role_id;
+		req.session.isManager = user.is_manager;
+		req.session.isBrewhouse = user.is_brewhouse;
+		req.session.isTaproom = user.is_taproom;
 
 		req.session.save(() => res.redirect("/dashboard"));
 	} catch (err) {
 		return res.status(500).send(err);
 	}
 });
+// END LOGIN
 
-// This route should create a new User
+// START EMPLOYEES
 router.route("/employees").post(async (req, res) => {
 	try {
 		const { firstname, lastname, role, username, password, confirm_password } = req.body;
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
+
 		const role_id = parseInt(role);
 		await db.query(
 			`INSERT INTO employees (first_name, last_name, role_id, username, password)
@@ -52,17 +66,20 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	const [{ affectedRows }] = await db.query(`DELETE FROM employees WHERE id = ?`, [
 		req.params.employeeId
 	]);
+
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });
+// END EMPLOYEES
 
+// START REQUESTS
 router.route("/requests").post(async (req, res) => {
 	try {
 		const insert_date = new Date();
 
-		const {request_style, add_notes} = req.body;
+		const { request_style, add_notes } = req.body;
 
-		const requestor_id = req.session.userId
+		const requestor_id = req.session.userId;
 
 		await db.query(
 			`INSERT INTO requests (requestor_id, style, notes, request_date)
@@ -87,6 +104,21 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	else res.status(404).send("Cart item not found");
 });
 
+router.route("/requests/:requestId").put(async (req, res) => {
+	const approval_date = new Date();
+
+	await db.query(
+		`
+		INSERT INTO approvals (approver_id, approval_date, request_id, is_approved)
+		VALUES (?, ?, ?, true)`,
+		[req.session.userId, approval_date, req.params.requestId]
+	);
+
+	res.redirect("/requests");
+});
+// END REQUESTS
+
+// START STYLE SEARCH
 router.route("/stylesearch").post(async (req, res) => {
 	try {
 		var body = req.body;
@@ -99,44 +131,45 @@ router.route("/stylesearch").post(async (req, res) => {
 		console.log(error);
 	}
 });
+// END STYLE SEARCH
 
-router.route("/requests/:requestId").put(async (req, res) => {
-	const approval_date = new Date();
+// START TAP PLAN
+router.route("/tapplan/now").post(async (req, res) => {
+	try {
+		const { beerId, tapId } = req.body;
+		const date_added = new Date();
 
-	await db.query(
-		`
-		INSERT INTO approvals (approver_id, approval_date, request_id)
-		VALUES (?, ?, ?)`,
-		[req.session.userId, approval_date, req.params.requestId]
-	);
-
-	res.redirect("/requests");
+		await db.query(
+			`
+			UPDATE on_tap 
+			SET beer_id = ?, date_added = ?, added_by = ?
+			WHERE id = ?`,
+			[beerId, date_added, req.session.userId, tapId]
+		);
+		res.redirect("/tapplan");
+	} catch (err) {
+		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
+	}
 });
 
-router.route("/tapplan/now/:tapId").post(async (req, res) => {
-	const {beerId, tapId, name} = req.body
-	console.log(req.body)
-	await db.query(`INSERT INTO on_tap (beer_id, name)
-	   VALUES (?,?) WHERE id=?`, [
-		   beerId, 
-		   name,
-		   tapId
-	   ]);
-   
-	   if (affectedRows === 1) res.status(204).end();
-	   else res.status(404).send("id not found");
+router.route("/tapplan/next").post(async (req, res) => {
+	try {
+		const { beerId, tapId } = req.body;
+		const date_added = new Date();
+
+		await db.query(
+			`
+			UPDATE next_on_tap 
+			SET beer_id = ?, date_added = ?, added_by = ?
+			WHERE id = ?`,
+			[beerId, date_added, req.session.userId, tapId]
+		);
+		res.redirect("/tapplan");
+	} catch (err) {
+		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
+	}
 });
 
-router.route("/tapplan/next/:tapId").post(async (req, res) => {
-const {beerId, tapId, name} = req.body
- await db.query(`INSERT INTO next_on_tap (beer_id, name)
-	VALUES (?,?) WHERE id=? `, [
-		beerId,
-		name,
-		tapId
-	]);
+// END TAP PLAN
 
-	if (affectedRows === 1) res.status(204).end();
-	else res.status(404).send("id not found");
-});
 module.exports = router;
