@@ -17,11 +17,11 @@ VALUES
 
 INSERT INTO inventory (name, category, style, ibu, srm, abv, brewed_date)
 VALUES 
-    ("Pale Ale", "American Pale Ale", "American Pale Ale", 5, 5, 5, "4/12/2023"),
-    ("Ipa", "Ipa", "Amber Bitter European Beer", 5, 5, 5, "4/12/2023"),
-    ("Czech Lager", "Czech Lager", "Czech Pale Lager", 5, 5, 5, "4/12/2023"),
-    ("Belgian Ale", "Belgian Ale", "Belgian Ale", 5, 5, 5, "4/12/2023"),
-    ("Cream Ale", "Cream Ale", "Cream Ale", 5, 5, 5, "4/12/2023"),
+    ("72", "Pale Ale", "American Pale Ale", 40, 4, 6, "4/12/2023"),
+    ("Ursa", "Ipa", "American Ipa", 60, 5, 7, "4/12/2023"),
+    ("True True", "Belgian", "Belgian Dubbel", 5, 5, 5, "4/12/2023"),
+    ("Wakulla", "German", "Hefeweizen", 12, 5, 6, "4/12/2023"),
+    ("Drift", "English", "Mild Brown Ale", 20, 5, 5, "4/12/2023"),
     ("Festbier", "Festbier", "Festbier", 5, 5, 5, "4/12/2023"),
     ("Pilsner", "Pilsner", "Pilsner", 5, 5, 5, "4/12/2023"),
     ("Light Lager", "Light Lager", "Light Lager", 5, 5, 5, "4/12/2023"),

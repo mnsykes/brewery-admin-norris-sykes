@@ -39,7 +39,7 @@ router.get("/dashboard", async (req, res) => {
 		heading: "Dashboard",
 		title: "toot | dashboard"
 	};
-
+	console.log(data.first_name)
 	pages = [
 		{
 			name: "Style Search",
@@ -65,7 +65,8 @@ router.get("/dashboard", async (req, res) => {
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
 			route: "/employees"
-		}
+		},
+
 	];
 	res.render("dashboard", {
 		page: pages,
@@ -111,17 +112,15 @@ router.get("/stylesearch", async (req, res) => {
 		const beerJSON = await axios.get(apiurl);
 		const beerData = beerJSON.data;
 
-		// Possibly change dataLoad to data
-		const dataLoad = {
+		const data = {
 			loggedIn: req.session.loggedIn,
 			heading: "Style Search",
 			headerBg: "search-bg_dark",
-			beerimg: "/images/pils.jpeg",
 			title: "toot | style search"
 		};
 		res.render("stylesearch", {
 			beerData,
-			dataLoad
+			data
 		});
 	} catch (error) {
 		console.error("There was a problem fetching the JSON file:", error);
@@ -139,9 +138,13 @@ router.post("/stylesearch/style", async (req, res) => {
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
 			if (beerData[i].name === nameList) {
+
 				console.log("this is fine");
 				matchingBeer = beerData[i];
 				console.log(beerData[i].categorynumber);
+
+				matchingBeer = beerData[i]
+
 				break;
 			}
 		}
@@ -152,8 +155,13 @@ router.post("/stylesearch/style", async (req, res) => {
 
 	const results = filterKeys(beerData, {
 		nameList
+
 	});
 	//deal with api image data
+
+	})
+	//deal with api image data, take api key from open ai 
+
 
 	const configuration = new Configuration({
 		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
@@ -167,18 +175,19 @@ router.post("/stylesearch/style", async (req, res) => {
 		n: 1,
 		size: "1024x1024"
 	});
+
+	//getting the first selection out of the ai generated data, inserting it into an embeddable
+	//url to place into the image slot
 	const image_url = response.data.data[0].url;
 
-	// Define the data you want to send in the POST request
-	const postData = { image_url: image_url };
-
 	res.render("stylesearch", {
+		img: 'public/images/toot.png',
 		loggedIn: req.session.loggedIn,
 		beerData,
 		results,
 		image_url
 	});
-});
+
 // END STYLE SEARCH
 
 // START TAP PLAN

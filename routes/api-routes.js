@@ -27,6 +27,7 @@ router.post("/login", async (req, res) => {
 
 		if (!isCorrectPassword) return res.status(400).send("Login error");
 
+		req.session.username = employees.username
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
 		req.session.isManager = user.is_manager;
@@ -47,7 +48,7 @@ router.route("/employees").post(async (req, res) => {
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
-		console.log(hash);
+
 		const role_id = parseInt(role);
 		await db.query(
 			`INSERT INTO employees (first_name, last_name, role_id, username, password)
@@ -65,7 +66,7 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	const [{ affectedRows }] = await db.query(`DELETE FROM employees WHERE id = ?`, [
 		req.params.employeeId
 	]);
-	console.log(affectedRows);
+
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });
@@ -168,5 +169,7 @@ router.route("/tapplan/next").post(async (req, res) => {
 		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
 	}
 });
+
 // END TAP PLAN
+
 module.exports = router;

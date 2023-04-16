@@ -16,7 +16,6 @@ if (typeof document !== "undefined") {
 
 async function approveRequest(e) {
 	const requestId = e.target.getAttribute("data-request-id");
-	// console.log(requestId);
 	await fetch(`/api/requests/${requestId}`, {
 		method: "put"
 	});
@@ -41,6 +40,7 @@ if (typeof document !== "undefined") {
 		btn.onclick = removeEmployee;
 	}
 }
+
 
 //filtering out names according to categories
 async function filterStyles(e) {
@@ -72,6 +72,7 @@ async function filterStyles(e) {
 		styleDropdown.innerHTML = styleOptions;
 	});
 }
+
 
 // Get the URL of the current page
 const currentUrl = window.location.href;
