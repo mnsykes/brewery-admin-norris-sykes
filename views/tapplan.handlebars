@@ -1,6 +1,8 @@
 {{> header}}
+
 <script type="module" src="/move-style.js"></script>
 <main class="container">
+    {{#if isManager}}
     <section class="row mb-5">
         <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4" action="api/tapplan/now" method="POST">
             <div class="input-group mb-3">
@@ -57,6 +59,7 @@
             </div>
         </form>
     </section> 
+    {{/if}}
    <section> 
         <div class="row">
             <div class="col-sm-6">
