@@ -1,5 +1,4 @@
 {{> header}}
-<script type="module" src="remove-emp-btn.js"></script>
 <main class="container">
   
     <section class="row mb-5">
@@ -7,36 +6,49 @@
             action="api/employees" method="POST">
             <div class="input-group mb-3">
                 <label for="firstname" class="input-group-text
-                    employees-bg_light">First name: </label>
+                    employees-bg_light">first name: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="firstname"
                     name="firstname"
-                    placeholder="Enter your first name"
+                    placeholder="enter your first name"
                     aria-label="firstname"
                     aria-describedby="firstname"
                     />
             </div>
             <div class="input-group mb-3">
                 <label for="lastname" class="input-group-text
-                    employees-bg_light">Last name: </label>
+                    employees-bg_light">last name: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="lastname"
                     name="lastname"
-                    placeholder="Enter your last name"
+                    placeholder="enter your last name"
                     aria-label="lastname"
                     aria-describedby="lastname"
                     />
             </div>
             <div class="input-group mb-3">
-                <label for="role" class="input-group-text employees-bg_light">Role:
+                <label for="email" class="input-group-text
+                    employees-bg_light">email: </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="enter your email"
+                    aria-label="email"
+                    aria-describedby="email"
+                    />
+            </div>
+            <div class="input-group mb-3">
+                <label for="role" class="input-group-text employees-bg_light">role:
                 </label>
                 <select name="role" id="role" class="form-select"
                     aria-label="Select role">
-                    <option selected>Select role</option>
+                    <option selected>select role</option>
                     {{#each role}}
                     <option value="{{id}}">{{role}}</option>
                     {{/each}}
@@ -44,15 +56,39 @@
             </div>
             <div class="input-group mb-3">
                 <label for="username" class="input-group-text
-                    employees-bg_light">Username: </label>
+                    employees-bg_light">username: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="username"
                     name="username"
-                    placeholder="Enter your username"
+                    placeholder="enter your username"
                     aria-label="username"
                     aria-describedby="username"
+                    />
+            </div>
+            <div class="input-group mb-3">
+                <label for="secret_question" class="input-group-text employees-bg_light">secret question:
+                </label>
+                <select name="secret_question" id="secret_question" class="form-select"
+                    aria-label="Select question">
+                    <option value="" selected>select question</option>
+                    {{#each question}}
+                    <option value="{{id}}">{{question}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <label for="secret_answer" class="input-group-text
+                    employees-bg_light">answer: </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="secret_answer"
+                    name="secret_answer"
+                    placeholder="enter your answer"
+                    aria-label="secret_answer"
+                    aria-describedby="secret_answer"
                     />
             </div>
             {{!-- 
@@ -63,34 +99,33 @@
              --}}
             <div class="input-group mb-3">
                 <label for="password" class="input-group-text
-                    employees-bg_light">Password: </label>
+                    employees-bg_light">password: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="password"
                     name="password"
-                    placeholder="Enter your password"
+                    placeholder="enter your password"
                     aria-label="password"
                     aria-describedby="password"
                     />
             </div>
             <div class="input-group mb-3">
                 <label for="confirm_password" class="input-group-text
-                    employees-bg_light">Confirm your password: </label>
+                    employees-bg_light">confirm your password: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="confirm_password"
                     name="confirm_password"
-                    placeholder="Confirm your password"
+                    placeholder="confirm your password"
                     aria-label="confirm_password"
                     aria-describedby="confirm_password"
                     />
             </div>
 
             <div class="col-sm-12">
-                <button type="submit" class="btn employees-bg_light">Submit</button>
-                <a href="/update-account">Forgot username/password?</a>
+                <button type="submit" class="btn employees-bg_light">submit</button>
             </div>
         </form>
     </section>
@@ -112,7 +147,7 @@
                         <td>{{last_name}}</td>
                         <td>{{role}}</td>
                         <td>
-                            <button class="btn btn-sm rounded requests-bg_light emp-action-btn" data-request-id="{{id}}">delete</button>
+                            <button class="btn btn-sm rounded employees-bg_light emp-action-btn" data-request-id="{{employee_id}}">delete</button>
                         </td>
                     </tr>
                     {{/each}}

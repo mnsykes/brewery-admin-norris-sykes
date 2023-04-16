@@ -16,30 +16,36 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-1 mb-lg-0">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
+						<a class="nav-link active" aria-current="page" href="/dashboard">home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/stylesearch">Style Search</a>
+						<a class="nav-link" href="/stylesearch">style search</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/tapplan">Tap Plan</a>
+						<a class="nav-link" href="/tapplan">tap plan</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/requests">Requests</a>
+						<a class="nav-link" href="/requests">requests</a>
 					</li>
+					{{#if isManagement}}
+						<li class="nav-item">
+							<a class="nav-link" href="/employees">employees</a>
+						</li>
+					{{/if}}
 					<li class="nav-item">
-						<a class="nav-link" href="/employees">Employees</a>
+						<a class="nav-link" href="/update-employee">update employee</a>
 					</li>
 					<li class="nav-item">
 						{{#if loggedIn}}
-							<a class="nav-link" href="/login">Logout</a>
+							<a class="nav-link" href="api/logout">logout</a>
 						{{else}}
-							<a class="nav-link" href="/login">Login</a>
+							<a class="nav-link" href="/">Login</a>
 						{{/if}}
 					</li>
 				</ul>
 			</div>
-			<a class="navbar-brand" href="/dashboard"> <img src="/images/toot.png" width="80" height="80"></a>
+			<a class="navbar-brand" href="/dashboard">
+				<img src="/images/toot.png" width="80" height="80" /></a>
 		</div>
 	</nav>
 </header>

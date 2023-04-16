@@ -40,19 +40,66 @@ router.post("/login", async (req, res) => {
 });
 // END LOGIN
 
+// START LOGOUT
+router.get("/logout", async (req, res) => {
+	req.session.destroy(() => res.redirect("/"));
+});
+// END LOGOUT
+
+// START SECURITY
+router.post("/security", async (req, res) => {
+	try {
+		const { employee_id, firstname, lastname, security_answer } = req.body;
+
+		if (!(employee_id && firstname && lastname && security_answer))
+			return res.status(400).send("All fields must be completed for validation.");
+		const [[user]] = await db.query(
+			`
+			SELECT * 
+			FROM employees
+			WHERE id = ? AND first_name = ? AND last_name = ?;
+		`,
+			[employee_id, firstname, lastname]
+		);
+
+		if (!user) return res.status(400).send("User not found");
+		const isCorrectAnswer = await bcrypt.compare(security_answer, user.security_answer);
+
+		if (!isCorrectAnswer) return res.status(400).send("Invalid credentials");
+
+		req.session.userId = user.id;
+
+		req.session.save(() => res.redirect("/update-employee"));
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+// END SECURITY
+
 // START EMPLOYEES
 router.route("/employees").post(async (req, res) => {
 	try {
-		const { firstname, lastname, role, username, password, confirm_password } = req.body;
+		const {
+			firstname,
+			lastname,
+			email,
+			role,
+			username,
+			password,
+			confirm_password,
+			secret_question,
+			secret_answer
+		} = req.body;
 		if (!(username && password)) return res.status(400).send("User not found");
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
-
+		const hash_secret_answer = await bcrypt.hash(secret_answer, 10);
+		console.log(`question: ${secret_question} answer ${hash_secret_answer}`);
 		const role_id = parseInt(role);
 		await db.query(
-			`INSERT INTO employees (first_name, last_name, role_id, username, password)
-			 VALUES (?, ?, ?, ?, ?)`,
-			[firstname, lastname, role_id, username, hash]
+			`INSERT INTO employees (first_name, last_name, email, role_id, username, password, question_id, security_answer)
+			 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+			[firstname, lastname, role_id, username, hash, secret_question, hash_secret_answer]
 		);
 		res.redirect("/employees");
 	} catch (err) {
@@ -69,7 +116,28 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 	if (affectedRows === 1) res.status(204).end();
 	else res.status(404).send("Cart item not found");
 });
+
 // END EMPLOYEES
+
+// START UPDATE EMPLOYEES
+router.route("/update-employee/:employeeId").post(async (req, res) => {
+	const { password, confirm_password } = req.body;
+	if (password !== confirm_password) return res.status(409).send("Password doesn't match");
+	const hash = await bcrypt.hash(password, 10);
+	console.log(password);
+	console.log(hash);
+	await db.query(
+		` 
+		UPDATE employees
+		SET password = ?
+	`,
+		[hash]
+	);
+	console.log(password);
+	console.log(hash);
+	res.redirect("/update-employee");
+});
+// END UPDATE EMPLOYEES
 
 // START REQUESTS
 router.route("/requests").post(async (req, res) => {

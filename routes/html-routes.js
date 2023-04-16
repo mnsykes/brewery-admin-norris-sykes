@@ -28,8 +28,22 @@ router.get("/login", async (req, res) => {
 });
 // END LOGIN
 
+// START SECURITY
+router.get("/security", async (req, res) => {
+	const [questions] = await db.query(`
+		SELECT * FROM security_questions
+		ORDER BY id ASC
+	`);
+	const data = {
+		question: questions
+	};
+	console.log(data);
+	res.render("security", data);
+});
+// END SECURITY
+
 // START DASHBOARD
-router.get("/dashboard", async (req, res) => {
+router.get("/dashboard", checkAuth, async (req, res) => {
 	const [[requests]] = await db.query(`
 		SELECT COUNT(r.id) - COUNT(a.id) AS NumRequests
 		FROM requests r
@@ -72,7 +86,12 @@ router.get("/dashboard", async (req, res) => {
 			btnColor: "employees-bg_light",
 			route: "/employees"
 		},
-
+		{
+			name: "update employee profile",
+			bgColor: "employees-bg_dark",
+			btnColor: "employees-bg_light",
+			route: "/update-employee"
+		}
 	];
 	res.render("dashboard", {
 		page: pages,
@@ -87,6 +106,7 @@ router.get("/dashboard", async (req, res) => {
 // START EMPLOYEES
 router.get("/employees", checkAuth, async (req, res) => {
 	const [roles] = await db.query(`SELECT * FROM roles`);
+	const [security_questions] = await db.query(`SELECT * FROM security_questions`);
 	const [employees] = await db.query(`
 		SELECT 
 		employees.id AS employee_id,
@@ -100,15 +120,40 @@ router.get("/employees", checkAuth, async (req, res) => {
 	const data = {
 		role: roles,
 		employee: employees,
+		question: security_questions,
 		loggedIn: req.session.loggedIn,
 		heading: "Employees",
 		headerBg: "employees-bg_dark",
-		title: "toot | employees",
-		roleId: 1
+		title: "toot | employees"
 	};
 	res.render("employees", data);
 });
 // END EMPLOYEES
+
+// START UPDATE EMPLOYEES
+router.get("/update-employee", async (req, res) => {
+	const [roles] = await db.query(`SELECT * FROM roles`);
+	const [[user_data]] = await db.query(
+		`
+		SELECT * FROM employees
+		WHERE id = ?
+	`,
+		[req.session.userId]
+	);
+	console.log(user_data);
+
+	const data = {
+		role: roles,
+		user: user_data,
+		loggedIn: req.session.loggedIn,
+		heading: "update employee profile",
+		headerBg: "employees-bg_dark",
+		title: "toot | update employee"
+	};
+	console.log(data);
+	res.render("update-employee", data);
+});
+// END UPDATE EMPLOYEES
 
 // START STYLE SEARCH
 router.get("/stylesearch", async (req, res) => {
@@ -142,12 +187,11 @@ router.post("/stylesearch/style", async (req, res) => {
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
 			if (beerData[i].name === nameList) {
-
 				console.log("this is fine");
 				matchingBeer = beerData[i];
 				console.log(beerData[i].categorynumber);
 
-				matchingBeer = beerData[i]
+				matchingBeer = beerData[i];
 
 				break;
 			}
@@ -159,7 +203,6 @@ router.post("/stylesearch/style", async (req, res) => {
 
 	const results = filterKeys(beerData, {
 		nameList
-
 	});
 	//deal with api image data
 
@@ -185,7 +228,7 @@ router.post("/stylesearch/style", async (req, res) => {
 	const image_url = response.data.data[0].url;
 
 	res.render("stylesearch", {
-		img: 'public/images/toot.png',
+		img: "public/images/toot.png",
 		loggedIn: req.session.loggedIn,
 		beerData,
 		results,
