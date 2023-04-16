@@ -116,7 +116,7 @@ router.route("/requests/:requestId").put(async (req, res) => {
 router.route("/tapplan/now/:tapId").post(async (req, res) => {
 	const {beerId, tapId, name} = req.body
 	console.log(req.body)
-	await db.query(`INSERT INTO on_tap (beer_id, name)
+	await db.query(`INSERT INTO on_tap (beer_id, tap_name)
 	   VALUES (?,?) WHERE id=?`, [
 		   beerId, 
 		   name,
@@ -129,7 +129,7 @@ router.route("/tapplan/now/:tapId").post(async (req, res) => {
 
 router.route("/tapplan/next/:tapId").post(async (req, res) => {
 const {beerId, tapId, name} = req.body
- await db.query(`INSERT INTO next_on_tap (beer_id, name)
+ await db.query(`INSERT INTO next_on_tap (beer_id, tap_name)
 	VALUES (?,?) WHERE id=? `, [
 		beerId,
 		name,
