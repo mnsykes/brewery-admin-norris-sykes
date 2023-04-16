@@ -1,10 +1,10 @@
 USE toot_app_db;
 
-INSERT INTO roles (role)
+INSERT INTO roles (role, is_manager, is_brewhouse, is_taproom)
 VALUES
-    ("Management"),
-    ("Brewhouse"),
-    ("Tap Room");
+    ("Management", true, false, false),
+    ("Brewhouse", false, true, false),
+    ("Tap Room", false, false, false);
 
 INSERT INTO employees (first_name, last_name, role_id, username, password)
 VALUES 
@@ -12,7 +12,7 @@ VALUES
     ("Daniella", "Brewhouse", 2, "d.brewhouse", "$2b$10$wvqUQxubaNfYRey0I/WSJuRlTmWmKr42nv3gZUAeceiVoN3GRb6Y6"),
     ("Daniella", "Taproom", 3, "d.taproom", "$2b$10$eb7GiMovBoNbWjtK4iNGku0zXBOxfP6MeIdC4EPk3fIyytRKdb50O"),
     ("Matt", "Manager", 1, "m.manager", "$2b$10$uLF7vwTlmRFjw6rnFwQYEuNRCb0nPwygEtm9BVJieuBCSJvugMBoq"),
-    ("Matt", "Brewhouse", 2, "m.brewhouse", "$2b$10$bm7vx6xnqOo8xkNnwWClNOTSemIJMkHVeEp.mGWtftGFn7O9YJ7lq"),
+    ("Matt", "Brewhouse", 2, "m.brewhouse", "$2b$10$EO6qHj5NT14M4vHFnt1xEeiHQrrl20dqE/qf3toUf7rj8Ll96MpyO"),
     ("Matt", "Taproom", 3, "m.taproom", "$2b$10$bm7vx6xnqOo8xkNnwWClNOTSemIJMkHVeEp.mGWtftGFn7O9YJ7lq");
 
 INSERT INTO inventory (name, category, style, ibu, srm, abv, brewed_date)

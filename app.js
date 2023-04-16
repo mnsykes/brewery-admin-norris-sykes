@@ -47,6 +47,6 @@ app.get("/stylesearch/style", (req, res) => {
 	res.redirect("/stylesearch");
 });
 
-app.get('')
+app.get("");
 
 module.exports = app;

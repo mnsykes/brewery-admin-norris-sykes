@@ -5,7 +5,12 @@
     <div class="row {{bgColor}} rounded w-50 p-5 mb-5">
         <div class="col-sm-3"></div>
         <div class="col-sm-9">
-            <a href="{{route}}" class="btn rounded {{btnColor}}">{{name}}</a>
+            <a href="{{route}}" class="btn rounded {{btnColor}}">
+                {{name}}
+                {{#if isRequest}}
+                <span class="badge badge-light">{{numRequests}}</span>
+                {{/if}}
+            </a>
         </div>
     </div>
     {{/each}}

@@ -1,66 +1,109 @@
 {{> header}}
+<script type="module" src="/move-style.js"></script>
 <main class="container">
-    {{!-- PROBABLY WON'T BE USING THIS --}}
-    {{!-- <section class="row mb-5">
-        <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4" action="" method="POST">
+    <section class="row mb-5">
+        <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4" action="api/tapplan/now" method="POST">
             <div class="input-group mb-3">
                 <span class="input-group-text tapplan-bg_light" id="on-now">on now: </span>
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="beer name"
-                    aria-label="on now"
-                    aria-describedby="on-now"
-                />
+               <select name="beerId" class="on-now">
+                        <option value="">select beer:</option>
+                        {{#each beer}}
+                        <option value="{{id}}" data-ontap-id="{{id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text tapplan-bg_light" id="on-after">on after: </span>
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="beer name"
-                    aria-label="on after"
-                    aria-describedby="on-after"
-                />
+                <span class="input-group-text tapplan-bg_light" id="on-after">select tap:</span>
+                <select name="tapId">  
+                    <option value="">Select tap</option> 
+                    {{#each onTap}}
+                    <option value="{{id}}" data-onTap-id="{{id}}">
+                    {{id}}
+                    </option>
+                    {{/each}}
+                </select> 
             </div>
 
             <div class="col-sm-12">
-                <button type="submit" class="btn tapplan-bg_light">Submit</button>
+                <button type="submit" id="on-tap-btn" class="btn tapplan-bg_light">Submit</button>
             </div>
         </form>
-    </section> --}}
-
-    {{!-- 
-        UPDATE ALL ATTRIBUTES, CLASSES, IDS, ETC TO MAKE ELEMENTS
-        ACCESSIBLE FOR JS
-     --}}
+    </section> 
     <section>
-        <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4">
-            {{#each onTap}}
-            <div class="row">
-                <div class="col-sm-5">
-                    <label for="" class="tapplan-bg_light rounded">On Tap {{id}}</label>
-                    <select name="" id="on-now">
-                        <option value="">Select tap {{id}}</option>
-                        {{#each ../beer}}
-                        <option value="{{id}}">{{name}}</option>
+    <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4" action="api/tapplan/next" method="POST">
+            <div class="input-group mb-3">
+                <span class="input-group-text tapplan-bg_light" id="on-now">on next: </span>
+               <select name="beerId" class="on-next">
+                        <option value=""> Select Beer</option>
+                        {{#each beer}}
+                        <option value="{{id}}" data-nextTap-id="{{id}}">{{name}}</option>
                         {{/each}}
                     </select>
-                </div>
-                <div class="col-sm-2">
-                    <i id="on-tap-arrow" class="{{../arrow}}"></i>
-                </div>
-                <div class="col-sm-5">
-                    <label for="" class="tapplan-bg_light rounded">Next On Tap {{id}}</label>
-                    <select name="" id="up-next">
-                        <option value="">Select</option>
-                        {{#each ../beer}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
             </div>
-            {{/each}}
+            <div class="input-group mb-3">
+                <span class="input-group-text tapplan-bg_light" id="on-after">select tap: </span>
+                <select name="tapId" class="on-next">  
+                    <option value="">select tap:</option> 
+                        {{#each onTap}}
+                    <option>
+                        {{id}}
+                    </option>
+                    {{/each}}
+                </select> 
+            </div>
+
+            <div class="col-sm-12">
+                <button type="submit" id="next-tap-btn" class="btn tapplan-bg_light">Submit</button>
+            </div>
         </form>
-    </section>
-</main>
+    </section> 
+   <section> 
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>on tap now</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">tap name</th>
+                        <th scope="col">beer name</th>
+                        <th scope="col">style</th>
+                        <th scope="col">date added</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each onTap}}
+                        <tr>
+                        <th scope="row">{{tap_name}}</th>
+                        <td>{{beer_name}}</td>
+                        <td>{{beer_style}}</td>
+                        <td>{{date_added}}</td>
+                        </tr>
+                        {{/each}}      
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <h3>next on tap</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">tap name</th>
+                        <th scope="col">beer name</th>
+                        <th scope="col">style</th>
+                        <th scope="col">date added</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each nextOnTap}}
+                        <tr>
+                        <th scope="row">{{tap_name}}</th>
+                        <td>{{beer_name}}</td>
+                        <td>{{beer_style}}</td>
+                        <td>{{date_added}}</td>
+                        </tr>
+                        {{/each}}      
+                    </tbody>
+                </table>               
+            </div>
+        </div>
+   </section>
