@@ -13,7 +13,7 @@ const app = express();
 router.get("/", (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
-		heading: "Login",
+		heading: "login to TOOT, the taproom management app.",
 		title: "toot | login"
 	};
 	res.render("index", data);
@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
 router.get("/login", async (req, res) => {
 	res.render("login", {
 		loggedIn: req.session.loggedIn,
-		heading: "Login",
+		heading: "login to TOOT, the taproom management app.",
 		title: "Brewery Admin"
 	});
 });
@@ -37,7 +37,6 @@ router.get("/security", async (req, res) => {
 	const data = {
 		question: questions
 	};
-	console.log(data);
 	res.render("security", data);
 });
 // END SECURITY
@@ -140,7 +139,6 @@ router.get("/update-employee", async (req, res) => {
 	`,
 		[req.session.userId]
 	);
-	console.log(user_data);
 
 	const data = {
 		role: roles,
@@ -150,7 +148,6 @@ router.get("/update-employee", async (req, res) => {
 		headerBg: "employees-bg_dark",
 		title: "toot | update employee"
 	};
-	console.log(data);
 	res.render("update-employee", data);
 });
 // END UPDATE EMPLOYEES
@@ -187,10 +184,7 @@ router.post("/stylesearch/style", async (req, res) => {
 		let matchingBeer = null;
 		for (let i = 0; i < beerData.length; i++) {
 			if (beerData[i].name === nameList) {
-				console.log("this is fine");
 				matchingBeer = beerData[i];
-				console.log(beerData[i].categorynumber);
-
 				matchingBeer = beerData[i];
 
 				break;
@@ -283,7 +277,7 @@ router.get("/tapplan", async (req, res) => {
 			headerBg: "tapplan-bg_dark",
 			title: "toot | tap plan"
 		};
-		console.log(data);
+
 		res.render("tapplan", data);
 	} catch (err) {
 		return res.status(500).send(` ${err.message} || ${err.sqlMessage}`);
@@ -316,7 +310,6 @@ router.get("/requests", async (req, res) => {
 		headerBg: "requests-bg_dark",
 		isManager: req.session.isManager
 	};
-	console.log(data);
 	res.render("requests", data);
 });
 // END REQUESTS

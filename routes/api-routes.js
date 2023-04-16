@@ -94,7 +94,7 @@ router.route("/employees").post(async (req, res) => {
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 		const hash = await bcrypt.hash(password, 10);
 		const hash_secret_answer = await bcrypt.hash(secret_answer, 10);
-		console.log(`question: ${secret_question} answer ${hash_secret_answer}`);
+
 		const role_id = parseInt(role);
 		await db.query(
 			`INSERT INTO employees (first_name, last_name, email, role_id, username, password, question_id, security_answer)
@@ -124,8 +124,6 @@ router.route("/update-employee/:employeeId").post(async (req, res) => {
 	const { password, confirm_password } = req.body;
 	if (password !== confirm_password) return res.status(409).send("Password doesn't match");
 	const hash = await bcrypt.hash(password, 10);
-	console.log(password);
-	console.log(hash);
 	await db.query(
 		` 
 		UPDATE employees
@@ -133,8 +131,7 @@ router.route("/update-employee/:employeeId").post(async (req, res) => {
 	`,
 		[hash]
 	);
-	console.log(password);
-	console.log(hash);
+
 	res.redirect("/update-employee");
 });
 // END UPDATE EMPLOYEES
