@@ -21,13 +21,12 @@ router.post("/login", async (req, res) => {
 		`,
 			[username]
 		);
-		console.log(user);
 		if (!user) return res.status(400).send("User not found");
 		const isCorrectPassword = await bcrypt.compare(password, user.password);
 
 		if (!isCorrectPassword) return res.status(400).send("Login error");
 
-		req.session.username = employees.username
+		req.session.username = user.username;
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
 		req.session.isManager = user.is_manager;
@@ -101,7 +100,7 @@ router.route("/requests/:requestId").delete(async (req, res) => {
 	]);
 
 	if (affectedRows === 1) res.status(204).end();
-	else res.status(404).send("Cart item not found");
+	else res.status(404).send("request not found");
 });
 
 router.route("/requests/:requestId").put(async (req, res) => {
@@ -168,6 +167,26 @@ router.route("/tapplan/next").post(async (req, res) => {
 	} catch (err) {
 		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
 	}
+});
+
+router.route("/tapplan/now/:tapId").put(async (req, res) => {
+
+	const [{ beerDelete }] = await db.query(`UPDATE on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`, [
+		req.params.tapId
+	]);
+
+	if (beerDelete === 1) res.status(204).end();
+	else res.status(404).send("beer not found");
+});
+
+
+router.route("/tapplan/next/:tapId").put(async (req, res) => {
+	const [{ nextDelete }] = await db.query(`UPDATE next_on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`, [
+		req.params.tapId
+	]);
+
+	if (nextDelete === 1) res.status(204).end();
+	else res.status(404).send("beer not found");
 });
 
 // END TAP PLAN

@@ -41,44 +41,34 @@ if (typeof document !== "undefined") {
 	}
 }
 
+async function removeTap(e) {
+	const tapId = e.target.getAttribute("data-request-id");
 
-//filtering out names according to categories
-async function filterStyles(e) {
-	fetch("/stylesearch", {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: { beerData }
-	})
-		.then(function (response) {
-			return response.json();
-		})
-
-		.catch(function (error) {
-			console.log(error);
-		});
-
-	const categoryDropdown = document.querySelector("#category-dropdown");
-	const styleDropdown = document.querySelector("#style-dropdown");
-
-	categoryDropdown.addEventListener("change", () => {
-		console.log("clicked");
-		const selectedCategory = categoryDropdown.value;
-		const filteredData = beerData.filter((item) => item.category === selectedCategory);
-		const styleOptions = filteredData
-			.map((item) => `<option value="${item.name}" class="name-option">${item.name}</option>`)
-			.join("");
-		styleDropdown.innerHTML = styleOptions;
+	await fetch(`/api/tapplan/now/${tapId}`, {
+		method: "put"
 	});
+	window.location.replace("/tapplan");
+}
+if (typeof document !== "undefined") {
+	for (const btn of document.querySelectorAll(".delete-btn-tapplan")) {
+		btn.onclick = removeTap;
+
+		
+	}
 }
 
+async function removeTapNext(e) {
+	const tapId = e.target.getAttribute("data-request-id");
 
-// Get the URL of the current page
-const currentUrl = window.location.href;
+	await fetch(`/api/tapplan/next/${tapId}`, {
+		method: "put"
+	});
+	window.location.replace("/tapplan");
+}
+if (typeof document !== "undefined") {
+	for (const btn of document.querySelectorAll(".delete-btn-tapplan-next")) {
+		btn.onclick = removeTapNext;
 
-// Listen for the page refresh event
-window.addEventListener("refresh", () => {
-	// Redirect the user back to the current page on refresh
-	window.location.href = currentUrl;
-});
+		
+	}
+}

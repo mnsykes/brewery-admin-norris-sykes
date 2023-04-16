@@ -21,6 +21,7 @@ router.get("/", (req, res) => {
 
 router.get("/login", async (req, res) => {
 	res.render("login", {
+		loggedIn: req.session.loggedIn,
 		heading: "Login",
 		title: "Brewery Admin"
 	});
@@ -34,12 +35,17 @@ router.get("/dashboard", async (req, res) => {
 		FROM requests r
 		LEFT JOIN approvals a ON a.request_id = r.id
 	`);
+	const [[employee]] = await db.query(`
+    SELECT first_name FROM employees WHERE id = ?
+`, [req.session.userId]);
+
 	const data = {
+		username: req.session.username,
 		loggedIn: req.session.loggedIn,
 		heading: "Dashboard",
-		title: "toot | dashboard"
+		title: "toot | dashboard",
+		firstName: req.session.firstName
 	};
-	console.log(data.first_name)
 	pages = [
 		{
 			name: "Style Search",
@@ -75,7 +81,6 @@ router.get("/dashboard", async (req, res) => {
 		title: "toot | brewery",
 		data
 	});
-	console.log(pages);
 });
 // END DASHBOARD
 
@@ -101,7 +106,6 @@ router.get("/employees", checkAuth, async (req, res) => {
 		title: "toot | employees",
 		roleId: 1
 	};
-	console.log(data);
 	res.render("employees", data);
 });
 // END EMPLOYEES
@@ -159,7 +163,7 @@ router.post("/stylesearch/style", async (req, res) => {
 	});
 	//deal with api image data
 
-	})
+	
 	//deal with api image data, take api key from open ai 
 
 
@@ -187,7 +191,7 @@ router.post("/stylesearch/style", async (req, res) => {
 		results,
 		image_url
 	});
-
+})
 // END STYLE SEARCH
 
 // START TAP PLAN
