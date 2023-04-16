@@ -1,71 +1,77 @@
-{{> header}}
+{{#if loggedIn}}
+    {{> header}}
+{{/if}}
 
 <main class="container">
     <section class="row mb-5">
-        <form id="login" class="rounded search-bg_dark p-4" action="api/create_user" method="POST">
+        <h1>{{heading}}</h1>
+        <form id="login" class="rounded employees-bg_dark p-4" action="api/update-employee/{{user.id}}" method="POST">
             <div class="input-group mb-3">
-                <label for="firstname" class="input-group-text search-bg_light">First name: </label>
+                <label for="firstname" class="input-group-text employees-bg_light">first name: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="firstname"
                     name="firstname"
-                    placeholder="Enter your first name"
+                    placeholder="enter your first name"
                     aria-label="firstname"
                     aria-describedby="firstname"
+                    value="{{user.first_name}}"
                 />
             </div>
             <div class="input-group mb-3">
-                <label for="lastname" class="input-group-text search-bg_light">Last name: </label>
+                <label for="lastname" class="input-group-text employees-bg_light">last name: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="lastname"
                     name="lastname"
-                    placeholder="Enter your last name"
+                    placeholder="enter your last name"
                     aria-label="lastname"
                     aria-describedby="lastname"
+                    value="{{user.last_name}}"
                 />
             </div>
             <div class="input-group mb-3">
-                <label for="username" class="input-group-text search-bg_light">Username: </label>
+                <label for="username" class="input-group-text employees-bg_light">username: </label>
                 <input
                     type="text"
                     class="form-control"
                     id="username"
                     name="username"
-                    placeholder="Enter your username"
+                    placeholder="enter your username"
                     aria-label="username"
                     aria-describedby="username"
+                    value="{{user.username}}"
                 />
             </div>
             <div class="input-group mb-3">
-                <label for="password" class="input-group-text search-bg_light">Password: </label>
+                <label for="password" class="input-group-text employees-bg_light">password: </label>
                 <input
                     type="password"
                     class="form-control"
                     id="password"
                     name="password"
-                    placeholder="Enter your password"
+                    placeholder="enter your new password"
                     aria-label="password"
                     aria-describedby="password"
                 />
             </div>
             <div class="input-group mb-3">
-                <label for="confirm_password" class="input-group-text search-bg_light">Confirm your password: </label>
+                <label for="confirm_password" class="input-group-text employees-bg_light">confirm your password: </label>
                 <input
                     type="password"
                     class="form-control"
                     id="confirm_password"
                     name="confirm_password"
-                    placeholder="Confirm your password"
+                    placeholder="confirm your password"
                     aria-label="confirm_password"
                     aria-describedby="confirm_password"
                 />
             </div>
                 
             <div class="col-sm-12">
-                <button type="submit" class="btn search-bg_light">Submit</button>
+                <button type="submit" class="btn employees-bg_light">Submit</button>
                 <a href="/update-account">Forgot username/password?</a>
             </div>
         </form>

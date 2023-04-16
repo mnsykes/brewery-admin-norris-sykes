@@ -10,15 +10,25 @@ CREATE TABLE roles (
     is_taproom BOOLEAN
 );
 
+CREATE TABLE security_questions (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  question VARCHAR(100)
+);
+
 CREATE TABLE employees (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
+    email VARCHAR(100),
     role_id INT NOT NULL,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
+    question_id INT,
+    security_answer VARCHAR(200),
     FOREIGN KEY (role_id)
-        REFERENCES roles (id)
+        REFERENCES roles (id),
+    FOREIGN KEY (question_id)
+        REFERENCES security_questions (id)
 );
 
 CREATE TABLE requests (
