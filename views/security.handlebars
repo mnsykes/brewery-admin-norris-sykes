@@ -1,0 +1,76 @@
+<div class="container">
+	<h1 class="text-center mt-5">{{heading}}</h1>
+	<form id="login" action="api/security" method="POST">
+		<div class="input-group mb-3">
+			<label for="employee_id" class="input-group-text employees-bg_light">employee id: </label>
+			<input
+				type="text"
+				class="form-control"
+				id="employee_id"
+				name="employee_id"
+				placeholder="Enter your employee id"
+				aria-label="employee_id"
+				aria-describedby="employee_id"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<label for="firstname" class="input-group-text employees-bg_light">first name: </label>
+			<input
+				type="text"
+				class="form-control"
+				id="firstname"
+				name="firstname"
+				placeholder="Enter your first name"
+				aria-label="firstname"
+				aria-describedby="firstname"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<label for="lastname" class="input-group-text employees-bg_light">last name: </label>
+			<input
+				type="lastname"
+				class="form-control"
+				id="lastname"
+				name="lastname"
+				placeholder="Enter your last name"
+				aria-label="lastname"
+				aria-describedby="lastname"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<label for="secret_question" class="input-group-text employees-bg_light">secret question:
+			</label>
+			<select
+				name="secret_question"
+				id="secret_question"
+				class="form-select"
+				aria-label="Select question"
+			>
+				<option value="" selected>select question</option>
+				{{#each question}}
+					<option value="{{id}}">{{question}}</option>
+				{{/each}}
+			</select>
+		</div>
+		<div class="input-group mb-3">
+			<label for="security_answer" class="input-group-text employees-bg_light">security answer:
+			</label>
+			<input
+				type="security_answer"
+				class="form-control"
+				id="security_answer"
+				name="security_answer"
+				placeholder="Enter your security answer"
+				aria-label="security_answer"
+				aria-describedby="security_answer"
+				required
+			/>
+		</div>
+		<div class="col-sm-12">
+			<button type="submit" class="btn employees-bg_light">Submit</button>
+		</div>
+	</form>
+</div>
