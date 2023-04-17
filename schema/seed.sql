@@ -4,7 +4,7 @@ INSERT INTO roles (role, is_manager, is_brewhouse, is_taproom)
 VALUES
     ("Management", true, false, false),
     ("Brewhouse", false, true, false),
-    ("Tap Room", false, false, false);
+    ("Tap Room", false, false, true);
 
 INSERT INTO security_questions (question)
 VALUES
@@ -15,11 +15,35 @@ VALUES
 
 INSERT INTO employees (first_name, last_name, email, role_id, username, password, question_id, security_answer)
 VALUES 
+    -- PW: manager
+    -- Employee Id: 1
+    -- Security question: 1
+    -- Security answer: los angeles
     ("Daniella", "Manager", "d.manager@toot.com", 1, "d.manager", "$2b$10$IolbONJDbx/rG9MRyfrmsOScXFd8Tzai7JJwNRdEOdfRwTBB67O3K", 1, "$2b$10$oZqywr4cosFw75PLzYRAEeRAK7yVSh/R6REY0klTc3C/Rc/2kdn2a"),
+    -- PW: brewhouse
+    -- Employee Id: 2
+    -- Security question: 2
+    -- Security answer: jane
     ("Daniella", "Brewhouse", "d.brewhouse@toot.com", 2, "d.brewhouse", "$2b$10$wvqUQxubaNfYRey0I/WSJuRlTmWmKr42nv3gZUAeceiVoN3GRb6Y6", 2, "$2b$10$QpZALTLkKA1zINFa1qVxw.4ZNJ6z3pnON2sSI7RmjGvoa42w/WPt2"),
+    -- PW: taproom
+    -- Employee Id: 3
+    -- Security question: 3
+    -- Security answer: monkey
     ("Daniella", "Taproom", "d.taproom@toot.com", 3, "d.taproom", "$2b$10$eb7GiMovBoNbWjtK4iNGku0zXBOxfP6MeIdC4EPk3fIyytRKdb50O", 3, "$2b$10$uxLivrVpAnj.iqu3RkWj/eMEKG5feK/Zawb6vSqxNnKriADwpfBSy"),
+    -- PW: manager
+    -- Employee Id: 4
+    -- Security question: 1
+    -- Security answer: los angeles
     ("Matt", "Manager", "m.manager@toot.com", 1, "m.manager", "$2b$10$uLF7vwTlmRFjw6rnFwQYEuNRCb0nPwygEtm9BVJieuBCSJvugMBoq", 1, "$2b$10$oZqywr4cosFw75PLzYRAEeRAK7yVSh/R6REY0klTc3C/Rc/2kdn2a"),
+    -- PW: brewhouse
+    -- Employee Id: 5
+    -- Security question: 2
+    -- Security answer: jane
     ("Matt", "Brewhouse", "m.brewhouse@toot.com", 2, "m.brewhouse", "$2b$10$EO6qHj5NT14M4vHFnt1xEeiHQrrl20dqE/qf3toUf7rj8Ll96MpyO", 2, "$2b$10$QpZALTLkKA1zINFa1qVxw.4ZNJ6z3pnON2sSI7RmjGvoa42w/WPt2"),
+    -- PW: taproom
+    -- Employee Id: 6
+    -- Security question: 3
+    -- Security answer: monkey
     ("Matt", "Taproom", "m.taproom@toot.com", 3, "m.taproom", "$2b$10$bm7vx6xnqOo8xkNnwWClNOTSemIJMkHVeEp.mGWtftGFn7O9YJ7lq", 3, "$2b$10$uxLivrVpAnj.iqu3RkWj/eMEKG5feK/Zawb6vSqxNnKriADwpfBSy");
 
 INSERT INTO inventory (name, category, style, ibu, srm, abv, brewed_date)
@@ -47,28 +71,28 @@ VALUES
 
 INSERT INTO on_tap (tap_name)
 VALUES
-    ("tap_1"),
-    ("tap_2"),
-    ("tap_3"),
-    ("tap_4"),
-    ("tap_5"),
-    ("tap_6"),
-    ("tap_7"),
-    ("tap_8"),
-    ("tap_9"),
-    ("tap_10");
+    ("1"),
+    ("2"),
+    ("3"),
+    ("4"),
+    ("5"),
+    ("6"),
+    ("7"),
+    ("8"),
+    ("9"),
+    ("10");
 
 INSERT INTO next_on_tap (tap_name)
 VALUES
-    ("tap_1"),
-    ("tap_2"),
-    ("tap_3"),
-    ("tap_4"),
-    ("tap_5"),
-    ("tap_6"),
-    ("tap_7"),
-    ("tap_8"),
-    ("tap_9"),
-    ("tap_10");
+    ("1"),
+    ("2"),
+    ("3"),
+    ("4"),
+    ("5"),
+    ("6"),
+    ("7"),
+    ("8"),
+    ("9"),
+    ("10");
     
 

@@ -9,11 +9,6 @@ function checkAuth(req, res, next) {
 				if (!req.session.isManager)
 					return res.status(400).send("You are not able to view this page.");
 				break;
-			case "/tapplan":
-			case "/requests":
-				if (roleId !== 1 || roleId !== 2)
-					return res.status(400).send("You are not able to view this page.");
-				break;
 		}
 		return next();
 	}
