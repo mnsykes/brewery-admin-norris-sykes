@@ -57,9 +57,7 @@ router.get("/dashboard", checkAuth, async (req, res) => {
 		username: req.session.username,
 		loggedIn: req.session.loggedIn,
 		heading: "Dashboard",
-		title: "toot | dashboard",
-		isManager: req.session.isManager
-		firstName: req.session.firstName
+		title: "toot | dashboard"
 	};
 
 	pages = [
