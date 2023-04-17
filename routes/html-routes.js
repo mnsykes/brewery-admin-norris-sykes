@@ -13,6 +13,7 @@ const app = express();
 router.get("/", (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
+
 		heading: "login to TOOT, the taproom management app.",
 		title: "toot | login",
 		isManager: req.session.isManager
@@ -188,7 +189,6 @@ router.get("/update-employee", async (req, res) => {
 
 	res.render("update-employee", data);
 });
-
 // END UPDATE EMPLOYEES
 
 // START STYLE SEARCH
