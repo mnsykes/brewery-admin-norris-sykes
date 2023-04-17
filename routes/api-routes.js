@@ -121,19 +121,27 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 
 // START UPDATE EMPLOYEES
 router.route("/update-employee/:employeeId").post(async (req, res) => {
-	const { password, confirm_password } = req.body;
-	if (password !== confirm_password) return res.status(409).send("Password doesn't match");
-	const hash = await bcrypt.hash(password, 10);
-	await db.query(
-		` 
-		UPDATE employees
-		SET password = ?
-	`,
-		[hash]
-	);
 
-	res.redirect("/update-employee");
+	try {
+		const { email, secret_question, secret_answer, password, confirm_password } = req.body;
+		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
+		const hash = await bcrypt.hash(password, 10);
+		const hash_secret_answer = await bcrypt.hash(secret_answer, 10);
+
+		await db.query(
+			` 
+			UPDATE employees
+			SET email = ?, question_id = ?, security_answer = ?, password = ?
+			WHERE id = ?
+		`,
+			[email, secret_question, hash_secret_answer, hash, req.session.userId]
+		);
+
+		res.redirect("/update-employee");
+	} catch (err) {}
+
 });
+
 // END UPDATE EMPLOYEES
 
 // START REQUESTS

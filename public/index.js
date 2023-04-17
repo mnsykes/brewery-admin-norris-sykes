@@ -36,14 +36,26 @@ async function removeEmployee(e) {
 	window.location.replace("/employees");
 }
 if (typeof document !== "undefined") {
-	for (const btn of document.querySelectorAll(".emp-action-btn")) {
+	for (const btn of document.querySelectorAll(".emp-delete-btn")) {
 		btn.onclick = removeEmployee;
+	}
+}
+async function updateEmployee(e) {
+	const employeeId = e.target.getAttribute("data-request-id");
+
+	await fetch(`/admin-update-employee/${employeeId}`, {
+		method: "get"
+	});
+	window.location.replace("/admin-update-employee");
+}
+if (typeof document !== "undefined") {
+	for (const btn of document.querySelectorAll(".emp-update-btn")) {
+		btn.onclick = updateEmployee;
 	}
 }
 
 async function removeTap(e) {
 	const tapId = e.target.getAttribute("data-request-id");
-
 	await fetch(`/api/tapplan/now/${tapId}`, {
 		method: "put"
 	});
@@ -68,7 +80,16 @@ async function removeTapNext(e) {
 if (typeof document !== "undefined") {
 	for (const btn of document.querySelectorAll(".delete-btn-tapplan-next")) {
 		btn.onclick = removeTapNext;
-
 		
 	}
 }
+
+// Get the URL of the current page
+const currentUrl = window.location.href;
+
+// Listen for the page refresh event
+window.addEventListener("refresh", () => {
+	// Redirect the user back to the current page on refresh
+	window.location.href = currentUrl;
+});
+

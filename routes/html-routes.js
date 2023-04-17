@@ -37,6 +37,7 @@ router.get("/security", async (req, res) => {
 	const data = {
 		question: questions
 	};
+
 	res.render("security", data);
 });
 // END SECURITY
@@ -108,12 +109,13 @@ router.get("/employees", checkAuth, async (req, res) => {
 	const [security_questions] = await db.query(`SELECT * FROM security_questions`);
 	const [employees] = await db.query(`
 		SELECT 
-		employees.id AS employee_id,
-		employees.first_name,
-		employees.last_name,
-		roles.role
-		FROM employees 
-		JOIN roles ON employees.role_id = roles.id
+		emp.id AS employee_id,
+		emp.first_name,
+		emp.last_name,
+		emp.email,
+		r.role
+		FROM employees emp
+		JOIN roles r ON emp.role_id = r.id
 	`);
 
 	const data = {
@@ -121,7 +123,7 @@ router.get("/employees", checkAuth, async (req, res) => {
 		employee: employees,
 		question: security_questions,
 		loggedIn: req.session.loggedIn,
-		heading: "Employees",
+		heading: "employee dashboard",
 		headerBg: "employees-bg_dark",
 		title: "toot | employees"
 	};
@@ -131,26 +133,102 @@ router.get("/employees", checkAuth, async (req, res) => {
 
 // START UPDATE EMPLOYEES
 router.get("/update-employee", async (req, res) => {
-	const [roles] = await db.query(`SELECT * FROM roles`);
+	const [questions] = await db.query(
+		`
+		SELECT * FROM security_questions 
+	`,
+		[req.session.userId]
+	);
+
 	const [[user_data]] = await db.query(
 		`
-		SELECT * FROM employees
-		WHERE id = ?
+		SELECT emp.*, r.role, sc.question
+		FROM employees emp
+		LEFT JOIN roles r ON r.id = emp.role_id
+		LEFT JOIN security_questions sc ON sc.id = emp.question_id
+		WHERE emp.id = ?
 	`,
 		[req.session.userId]
 	);
 
 	const data = {
-		role: roles,
+		question: questions,
 		user: user_data,
 		loggedIn: req.session.loggedIn,
 		heading: "Update Employee Profile",
 		headerBg: "employees-bg_dark",
 		title: "toot | update employee"
 	};
+
 	res.render("update-employee", data);
 });
+
 // END UPDATE EMPLOYEES
+
+// START ADMIN UPDATE EMPLOYEE
+router.get("/admin-update-employee", async (req, res) => {
+	const [questions] = await db.query(
+		`
+		SELECT * FROM security_questions 
+	`,
+		[req.session.userId]
+	);
+
+	const [[user_data]] = await db.query(
+		`
+		SELECT emp.*, r.role, sc.question
+		FROM employees emp
+		LEFT JOIN roles r ON r.id = emp.role_id
+		LEFT JOIN security_questions sc ON sc.id = emp.question_id
+		WHERE emp.id = ?
+	`,
+		[req.params.employeeId]
+	);
+
+	const data = {
+		question: questions,
+		user: user_data,
+		loggedIn: req.session.loggedIn,
+		heading: "update employee profile",
+		headerBg: "employees-bg_dark",
+		title: "toot | update employee"
+	};
+
+	res.render("update-employee", data);
+});
+
+router.get("/admin-update-employee/:employeeId", async (req, res) => {
+	console.log(req.params.employeeId);
+	const [questions] = await db.query(
+		`
+		SELECT * FROM security_questions 
+	`,
+		[req.params.employeeId]
+	);
+
+	const [[user_data]] = await db.query(
+		`
+		SELECT emp.*, r.role, sc.question
+		FROM employees emp
+		LEFT JOIN roles r ON r.id = emp.role_id
+		LEFT JOIN security_questions sc ON sc.id = emp.question_id
+		WHERE emp.id = ?
+	`,
+		[req.params.employeeId]
+	);
+
+	const data = {
+		question: questions,
+		user: user_data,
+		loggedIn: req.session.loggedIn,
+		heading: "update employee profile",
+		headerBg: "employees-bg_dark",
+		title: "toot | update employee"
+	};
+	console.log(data);
+	res.render("update-employee", data);
+});
+// END ADMIN UPDATE EMPLOYEE
 
 // START STYLE SEARCH
 router.get("/stylesearch", async (req, res) => {
@@ -160,7 +238,7 @@ router.get("/stylesearch", async (req, res) => {
 
 		const data = {
 			loggedIn: req.session.loggedIn,
-			heading: "Style Search",
+			heading: "style search",
 			headerBg: "search-bg_dark",
 			title: "toot | style search"
 		};
@@ -304,12 +382,13 @@ router.get("/requests", async (req, res) => {
 
 	const data = {
 		request: requests,
-		heading: "Dashboard",
+		heading: "requests",
 		loggedIn: req.session.loggedIn,
 		title: "toot | requests",
 		headerBg: "requests-bg_dark",
 		isManager: req.session.isManager
 	};
+
 	res.render("requests", data);
 });
 // END REQUESTS
