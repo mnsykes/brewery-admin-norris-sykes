@@ -14,7 +14,7 @@ router.post("/login", async (req, res) => {
 		if (!(username && password)) return res.status(400).send("Must include username and password");
 		const [[user]] = await db.query(
 			`
-			SELECT emp.id, emp.username, emp.password, r.is_manager, r.is_brewhouse, r.is_taproom 
+			SELECT emp.id, emp.username, emp.password, emp.role_id, r.is_manager, r.is_brewhouse, r.is_taproom 
 			FROM employees emp
 			LEFT JOIN roles r ON emp.role_id = r.id
 			WHERE username = ?;
@@ -29,6 +29,7 @@ router.post("/login", async (req, res) => {
 		req.session.username = user.username;
 		req.session.loggedIn = true;
 		req.session.userId = user.id;
+		req.session.roleId = user.role_id;
 		req.session.isManager = user.is_manager;
 		req.session.isBrewhouse = user.is_brewhouse;
 		req.session.isTaproom = user.is_taproom;
@@ -121,7 +122,6 @@ router.route("/employees/:employeeId").delete(async (req, res) => {
 
 // START UPDATE EMPLOYEES
 router.route("/update-employee/:employeeId").post(async (req, res) => {
-
 	try {
 		const { email, secret_question, secret_answer, password, confirm_password } = req.body;
 		if (password !== confirm_password) return res.status(409).send("Password doesn't match");
@@ -139,7 +139,6 @@ router.route("/update-employee/:employeeId").post(async (req, res) => {
 
 		res.redirect("/update-employee");
 	} catch (err) {}
-
 });
 
 // END UPDATE EMPLOYEES
@@ -236,7 +235,7 @@ router.route("/tapplan/next").post(async (req, res) => {
 			WHERE id = ?`,
 			[beerId, date_added, req.session.userId, tapId]
 		);
-		
+
 		req.session.save(() => res.redirect("/tapplan"));
 	} catch (err) {
 		return res.status(500).send(`Error: ${err.message} || ${err.sqlMessage}`);
@@ -244,10 +243,10 @@ router.route("/tapplan/next").post(async (req, res) => {
 });
 
 router.route("/tapplan/now/:tapId").put(async (req, res) => {
-
-	const [{ beerDelete }] = await db.query(`UPDATE on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`, [
-		req.params.tapId
-	]);
+	const [{ beerDelete }] = await db.query(
+		`UPDATE on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`,
+		[req.params.tapId]
+	);
 
 	if (beerDelete === 1) res.status(204).end();
 	else res.status(404).send("beer not found");
@@ -255,11 +254,11 @@ router.route("/tapplan/now/:tapId").put(async (req, res) => {
 	req.session.save(() => res.redirect("/tapplan"));
 });
 
-
 router.route("/tapplan/next/:tapId").put(async (req, res) => {
-	const [{ nextDelete }] = await db.query(`UPDATE next_on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`, [
-		req.params.tapId
-	]);
+	const [{ nextDelete }] = await db.query(
+		`UPDATE next_on_tap SET beer_id = NULL, date_added = NULL WHERE id = ?`,
+		[req.params.tapId]
+	);
 
 	if (nextDelete === 1) res.status(204).end();
 	else res.status(404).send("beer not found");
