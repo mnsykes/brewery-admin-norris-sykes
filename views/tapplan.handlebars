@@ -94,13 +94,12 @@
                             <td>{{beer_name}}</td>
                             <td>{{beer_style}}</td>
                             <td>{{date_added}}</td>
-                            {{#if isManager}}
+                            {{#if ../isManager}}
                             <td> 
                                 <button class="btn btn-sm delete-btn-tapplan rounded tapplan-bg_light" data-request-id="{{id}}">delete</button>
                             </td>
                             {{/if}}
                         </tr>
-
                         {{/each}}
                     </tbody>
                 </table>
@@ -124,7 +123,9 @@
                             <td>{{beer_name}}</td>
                             <td>{{beer_style}}</td>
                             <td>{{date_added}}</td>
+                            {{#if ../isManager}}
                             <td>                             <button class="btn btn-sm delete-btn-tapplan-next rounded tapplan-bg_light" data-request-id="{{id}}">delete</button></td>
+                        {{/if}}
                         </tr>
                         {{/each}}
                     </tbody>
