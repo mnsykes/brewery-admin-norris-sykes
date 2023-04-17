@@ -96,11 +96,10 @@ router.route("/employees").post(async (req, res) => {
 		const hash = await bcrypt.hash(password, 10);
 		const hash_secret_answer = await bcrypt.hash(secret_answer, 10);
 
-		const role_id = parseInt(role);
 		await db.query(
 			`INSERT INTO employees (first_name, last_name, email, role_id, username, password, question_id, security_answer)
 			 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-			[firstname, lastname, role_id, email, username, hash, secret_question, hash_secret_answer]
+			[firstname, lastname, email, role, username, hash, secret_question, hash_secret_answer]
 		);
 		res.redirect("/employees");
 	} catch (err) {
