@@ -5,19 +5,49 @@
 </div>
 <div class="container w-75">
     {{#each page}}
+   
+    {{#if isManager}}
     <div class="row {{bgColor}} w-75 rounded p-5 mb-3 mx-auto">
         <div class="col-sm-10">
             <a href="{{route}}" class="btn rounded p-3 {{btnColor}}">
                 <h5>
                     {{name}}
                 </h5>
-                {{#if isRequest}}
                 <span class="badge badge-light">{{numRequests}}</span>
-                {{/if}}
             </a>
         </div>
-
     </div>
+    {{/if}}
+
+    {{#if isTaproom}}
+    {{#if showTaproom}}
+    <div class="row {{bgColor}} w-75 rounded p-5 mb-3 mx-auto">
+        <div class="col-sm-10">
+            <a href="{{route}}" class="btn rounded p-3 {{btnColor}}">
+                <h5>
+                    {{name}}
+                </h5>
+                <span class="badge badge-light">{{numRequests}}</span>
+            </a>
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
+    
+    {{#if isBrewhouse}}
+    {{#if showBrewhouse}}
+    <div class="row {{bgColor}} w-75 rounded p-5 mb-3 mx-auto">
+        <div class="col-sm-10">
+            <a href="{{route}}" class="btn rounded p-3 {{btnColor}}">
+                <h5>
+                    {{name}}
+                </h5>
+                <span class="badge badge-light">{{numRequests}}</span>
+            </a>
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
     {{/each}}
 </div>
 <div class="row">

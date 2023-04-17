@@ -1,70 +1,76 @@
 {{> header}}
 <h2 class="rounded tapplan-bg_light p-3 mb-4"> add, update, and delete tap plan </h1>
 <main class="container">
-    <section class="row mb-5">
-        <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4"
-            action="api/tapplan/now" method="POST">
-            <div class="input-group mb-3">
-                <span class="input-group-text tapplan-bg_light" id="on-now">on
-                    now: </span>
-                <select name="beerId" class="on-now">
-                    <option value="">Select beer</option>
-                    {{#each beer}}
-                    <option value="{{id}}" data-ontap-id="{{id}}">{{name}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text tapplan-bg_light" id="on-after">select
-                    tap:</span>
-                <select name="tapId">
-                    <option value="">Select tap</option>
-                    {{#each onTap}}
-                    <option value="{{id}}" data-onTap-id="{{id}}">
-                        {{id}}
-                    </option>
-                    {{/each}}
-                </select>
-            </div>
+    {{#if isManager}}
+    <div class="row">
+        <section class="col-sm-6 mb-5">
+            <h3>on tap now</h3>
+            <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4"
+                action="api/tapplan/now" method="POST">
+                <div class="input-group mb-3">
+                    <span class="input-group-text tapplan-bg_light" id="on-now">on
+                        now: </span>
+                    <select name="beerId" class="on-now">
+                        <option value="">Select beer</option>
+                        {{#each beer}}
+                        <option value="{{id}}" data-ontap-id="{{id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text tapplan-bg_light" id="on-after">select
+                        tap:</span>
+                    <select name="tapId">
+                        <option value="">Select tap</option>
+                        {{#each onTap}}
+                        <option value="{{id}}" data-onTap-id="{{id}}">
+                            {{id}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
 
-            <div class="col-sm-12">
-                <button type="submit" id="on-tap-btn" class="btn
-                    tapplan-bg_light">Submit</button>
-            </div>
-        </form>
-    </section>
-    <section>
-        <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4"
-            action="api/tapplan/next" method="POST">
-            <div class="input-group mb-3">
-                <span class="input-group-text tapplan-bg_light" id="on-now">on
-                    next: </span>
-                <select name="beerId" class="on-next">
-                    <option value=""> Select Beer</option>
-                    {{#each beer}}
-                    <option value="{{id}}" data-nextTap-id="{{id}}">{{name}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text tapplan-bg_light" id="on-after">select
-                    tap: </span>
-                <select name="tapId" class="on-next">
-                    <option value="">Select tap</option>
-                    {{#each onTap}}
-                    <option>
-                        {{id}}
-                    </option>
-                    {{/each}}
-                </select>
-            </div>
+                <div class="col-sm-12">
+                    <button type="submit" id="on-tap-btn" class="btn
+                        tapplan-bg_light">Submit</button>
+                </div>
+            </form>
+        </section>
+        <section class="col-sm-6 mb-5">
+            <h3>next on tap</h3>
+            <form id="tapplan-search_box" class="rounded tapplan-bg_dark p-4"
+                action="api/tapplan/next" method="POST">
+                <div class="input-group mb-3">
+                    <span class="input-group-text tapplan-bg_light" id="on-now">on
+                        next: </span>
+                    <select name="beerId" class="on-next">
+                        <option value=""> Select Beer</option>
+                        {{#each beer}}
+                        <option value="{{id}}" data-nextTap-id="{{id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text tapplan-bg_light" id="on-after">select
+                        tap: </span>
+                    <select name="tapId" class="on-next">
+                        <option value="">Select tap</option>
+                        {{#each onTap}}
+                        <option>
+                            {{id}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
 
-            <div class="col-sm-12">
-                <button type="submit" id="next-tap-btn" class="btn
-                    tapplan-bg_light">Submit</button>
-            </div>
-        </form>
-    </section>
+                <div class="col-sm-12">
+                    <button type="submit" id="next-tap-btn" class="btn
+                        tapplan-bg_light">Submit</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    {{/if}}
     <section>
         <div class="row">
             <div class="col-sm-6">
@@ -76,6 +82,9 @@
                             <th scope="col">beer name</th>
                             <th scope="col">style</th>
                             <th scope="col">date added</th>
+                            {{#if isManager}}
+                            <th scope="col"></th>
+                            {{/if}}
                         </tr>
                     </thead>
                     <tbody>
@@ -85,8 +94,11 @@
                             <td>{{beer_name}}</td>
                             <td>{{beer_style}}</td>
                             <td>{{date_added}}</td>
-                            <td> <button class="btn btn-sm delete-btn-tapplan rounded
-                                    tapplan-bg_light" data-request-id="{{id}}">delete</button></td>
+                            {{#if isManager}}
+                            <td> 
+                                <button class="btn btn-sm delete-btn-tapplan rounded tapplan-bg_light" data-request-id="{{id}}">delete</button>
+                            </td>
+                            {{/if}}
                         </tr>
 
                         {{/each}}

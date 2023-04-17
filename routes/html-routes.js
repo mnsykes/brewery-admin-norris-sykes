@@ -14,7 +14,8 @@ router.get("/", (req, res) => {
 	const data = {
 		loggedIn: req.session.loggedIn,
 		heading: "login to TOOT, the taproom management app.",
-		title: "toot | login"
+		title: "toot | login",
+		isManager: req.session.isManager
 	};
 	res.render("index", data);
 });
@@ -44,14 +45,12 @@ router.get("/security", async (req, res) => {
 
 // START DASHBOARD
 router.get("/dashboard", checkAuth, async (req, res) => {
-	const [[requests]] = await db.query(`
-		SELECT COUNT(r.id) - COUNT(a.id) AS NumRequests
-		FROM requests r
-		LEFT JOIN approvals a ON a.request_id = r.id
-	`);
-	const [[employee]] = await db.query(`
-    SELECT first_name FROM employees WHERE id = ?
-`, [req.session.userId]);
+	const [[employee]] = await db.query(
+		`
+    	SELECT first_name FROM employees WHERE id = ?
+	`,
+		[req.session.userId]
+	);
 
 	const data = {
 		username: req.session.username,
@@ -60,37 +59,62 @@ router.get("/dashboard", checkAuth, async (req, res) => {
 		title: "toot | dashboard",
 		firstName: req.session.firstName
 	};
+
 	pages = [
 		{
 			name: "Style Search",
 			bgColor: "search-bg_dark",
 			btnColor: "search-bg_light",
-			route: "/stylesearch"
+			route: "/stylesearch",
+			isManager: req.session.isManager,
+			isBrewhouse: req.session.isBrewhouse,
+			showBrewhouse: true,
+			isTaproom: req.session.isTaproom,
+			showTaproom: true
 		},
 		{
 			name: "Tap Plan",
 			bgColor: "tapplan-bg_dark",
 			btnColor: "tapplan-bg_light",
-			route: "/tapplan"
+			route: "/tapplan",
+			isManager: req.session.isManager,
+			isBrewhouse: req.session.isBrewhouse,
+			showBrewhouse: true,
+			isTaproom: req.session.isTaproom,
+			showTaproom: true
 		},
 		{
 			name: "Requests",
 			bgColor: "requests-bg_dark",
 			btnColor: "requests-bg_light",
 			route: "/requests",
-			numRequests: requests
+			isManager: req.session.isManager,
+			isBrewhouse: req.session.isBrewhouse,
+			showBrewhouse: true,
+			isTaproom: req.session.isTaproom,
+			showTaproom: true
 		},
 		{
 			name: "Employees",
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
-			route: "/employees"
+			route: "/employees",
+			isManager: req.session.isManager,
+			isBrewhouse: req.session.isBrewhouse,
+			showBrewhouse: false,
+			isTaproom: req.session.isTaproom,
+			showTaproom: false
 		},
 		{
 			name: "Update Employee Profile",
 			bgColor: "employees-bg_dark",
 			btnColor: "employees-bg_light",
-			route: "/update-employee"
+			route: "/update-employee",
+			isManager: req.session.isManager,
+			isBrewhouse: req.session.isBrewhouse,
+			showBrewhouse: true,
+			isTaproom: req.session.isTaproom,
+			showTaproom: true
 		}
 	];
 	res.render("dashboard", {
@@ -98,6 +122,7 @@ router.get("/dashboard", checkAuth, async (req, res) => {
 		loggedIn: req.session.loggedIn,
 		heading: "Login",
 		title: "toot | brewery",
+		isManager: req.session.isManager,
 		data
 	});
 });
@@ -125,7 +150,8 @@ router.get("/employees", checkAuth, async (req, res) => {
 		loggedIn: req.session.loggedIn,
 		heading: "employee dashboard",
 		headerBg: "employees-bg_dark",
-		title: "toot | employees"
+		title: "toot | employees",
+		isManager: req.session.isManager
 	};
 	res.render("employees", data);
 });
@@ -157,78 +183,14 @@ router.get("/update-employee", async (req, res) => {
 		loggedIn: req.session.loggedIn,
 		heading: "Update Employee Profile",
 		headerBg: "employees-bg_dark",
-		title: "toot | update employee"
+		title: "toot | update employee",
+		isManager: req.session.isManager
 	};
 
 	res.render("update-employee", data);
 });
 
 // END UPDATE EMPLOYEES
-
-// START ADMIN UPDATE EMPLOYEE
-router.get("/admin-update-employee", async (req, res) => {
-	const [questions] = await db.query(
-		`
-		SELECT * FROM security_questions 
-	`,
-		[req.session.userId]
-	);
-
-	const [[user_data]] = await db.query(
-		`
-		SELECT emp.*, r.role, sc.question
-		FROM employees emp
-		LEFT JOIN roles r ON r.id = emp.role_id
-		LEFT JOIN security_questions sc ON sc.id = emp.question_id
-		WHERE emp.id = ?
-	`,
-		[req.params.employeeId]
-	);
-
-	const data = {
-		question: questions,
-		user: user_data,
-		loggedIn: req.session.loggedIn,
-		heading: "update employee profile",
-		headerBg: "employees-bg_dark",
-		title: "toot | update employee"
-	};
-
-	res.render("update-employee", data);
-});
-
-router.get("/admin-update-employee/:employeeId", async (req, res) => {
-	console.log(req.params.employeeId);
-	const [questions] = await db.query(
-		`
-		SELECT * FROM security_questions 
-	`,
-		[req.params.employeeId]
-	);
-
-	const [[user_data]] = await db.query(
-		`
-		SELECT emp.*, r.role, sc.question
-		FROM employees emp
-		LEFT JOIN roles r ON r.id = emp.role_id
-		LEFT JOIN security_questions sc ON sc.id = emp.question_id
-		WHERE emp.id = ?
-	`,
-		[req.params.employeeId]
-	);
-
-	const data = {
-		question: questions,
-		user: user_data,
-		loggedIn: req.session.loggedIn,
-		heading: "update employee profile",
-		headerBg: "employees-bg_dark",
-		title: "toot | update employee"
-	};
-	console.log(data);
-	res.render("update-employee", data);
-});
-// END ADMIN UPDATE EMPLOYEE
 
 // START STYLE SEARCH
 router.get("/stylesearch", async (req, res) => {
@@ -240,7 +202,8 @@ router.get("/stylesearch", async (req, res) => {
 			loggedIn: req.session.loggedIn,
 			heading: "style search",
 			headerBg: "search-bg_dark",
-			title: "toot | style search"
+			title: "toot | style search",
+			isManager: req.session.isManager
 		};
 		res.render("stylesearch", {
 			beerData,
@@ -278,9 +241,7 @@ router.post("/stylesearch/style", async (req, res) => {
 	});
 	//deal with api image data
 
-	
-	//deal with api image data, take api key from open ai 
-
+	//deal with api image data, take api key from open ai
 
 	const configuration = new Configuration({
 		organization: "org-UeFbUMZJFryaNCscKwZXQiJr",
@@ -306,23 +267,11 @@ router.post("/stylesearch/style", async (req, res) => {
 		results,
 		image_url
 	});
-})
+});
 // END STYLE SEARCH
 
 // START TAP PLAN
-/*
-CREATED on_tap TABLE AND next_on_tap TABLE. JOIN THE TWO
-TABLES TOGETHER TO RETRIEVE RESULTS AFTER DATA IS ENTERED USING
-TAP PLAN PAGE. BOTH TABLES ARE SEEDED WITH tap_name ONLY.
-CREATED inventory TABLE AND SEEDED IT WITH GENERIC BEERS.
-THIS TABLE WILL CONTAIN CURRENT BEERS THAT HAVE BEEN BREWED
-AND WILL BE USED TO POPULATE DROPDOWNS IN TAP PLAN PAGE.
-YOU CAN UPDATE THIS IN seed.sql TO ANYTHING YOU LIKE AND ALSO
-ADD ANY COLUMNS TO THE TABLE THAT YOU'D LIKE TO HAVE.
-I THINK IT WOULD BE COOL TO ADD THE BEERS YOU CURRENTLY HAVE 
-AT YOUR BREWERY.
-*/
-router.get("/tapplan", async (req, res) => {
+router.get("/tapplan", checkAuth, async (req, res) => {
 	try {
 		const [on_tap_data] = await db.query(`
 			SELECT ot.*, inv.name AS beer_name, inv.style AS beer_style
@@ -353,7 +302,8 @@ router.get("/tapplan", async (req, res) => {
 			loggedIn: req.session.loggedIn,
 			heading: "Tap Plan",
 			headerBg: "tapplan-bg_dark",
-			title: "toot | tap plan"
+			title: "toot | tap plan",
+			isManager: req.session.isManager
 		};
 
 		res.render("tapplan", data);
@@ -364,7 +314,7 @@ router.get("/tapplan", async (req, res) => {
 // END TAP PLAN
 
 // START REQUESTS
-router.get("/requests", async (req, res) => {
+router.get("/requests", checkAuth, async (req, res) => {
 	const [requests] = await db.query(
 		`
 	SELECT
@@ -386,7 +336,8 @@ router.get("/requests", async (req, res) => {
 		loggedIn: req.session.loggedIn,
 		title: "toot | requests",
 		headerBg: "requests-bg_dark",
-		isManager: req.session.isManager
+		isManager: req.session.isManager,
+		isTaproom: req.session.isTaproom
 	};
 
 	res.render("requests", data);
