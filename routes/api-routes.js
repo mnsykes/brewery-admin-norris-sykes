@@ -146,9 +146,7 @@ router.route("/update-employee/:employeeId").post(async (req, res) => {
 router.route("/requests").post(async (req, res) => {
 	try {
 		const insert_date = new Date();
-
 		const { request_style, add_notes } = req.body;
-
 		const requestor_id = req.session.userId;
 
 		await db.query(
